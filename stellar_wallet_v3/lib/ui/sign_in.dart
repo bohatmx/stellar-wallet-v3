@@ -140,8 +140,13 @@ class _LoginPageState extends State<LoginPage> {
           mWallet = new Wallet.fromJSON(snapshot.value);
           if (mWallet.success) {
             mWallet.walletID = snapshot.key;
+            mWallet.fcmToken = await SharedPrefs.getFCMToken();
+            print(
+                '_LoginPageState._addWallet  - saving wallet in  prefs: ##### ${mWallet.toJson()}');
             await SharedPrefs.saveWallet(mWallet);
             isNavigated = true;
+            var ref = mainReference.child(key);
+            ref.set(mWallet.toJson());
             Navigator.popAndPushNamed(context, '/account');
           } else {
             _showSnak("Wallet  creation failed. Please try again");
@@ -206,55 +211,6 @@ class _LoginPageState extends State<LoginPage> {
     }
     return null;
   }
-
-  void listenToWallet() {}
-
-//  Future _getAuth() async {
-//    print('_LoginPageState._getAuth ###################################');
-//    String msg;
-//    try {
-//      var result = await platform1.invokeMethod('auth');
-//      var cachedToken = await SharedPrefs.getFCMToken();
-//      print('_LoginPageState._getAuth result came back... yay!');
-//      print('_LoginPageState._getAuth $result');
-//      var user = await _auth.currentUser();
-//      if (user != null) {
-//        print(
-//            '_LoginPageState._getAuth ###### YEAHHH!!! authentication worked');
-//        print('_LoginPageState._getAuth ${user.toString()}');
-//        //check if wallet exists
-//        await _findExistingWallet(user);
-//        if (mWallet != null) {
-//          mWallet.fcmToken = cachedToken;
-//          if (mWallet.isEncrypted == null || !mWallet.isEncrypted) {
-//            await _encrypt();
-//            Navigator.popAndPushNamed(context, '/account');
-//          } else {
-//            await SharedPrefs.saveWallet(mWallet);
-//            assert(mWallet.walletID != null);
-//            final mainReference =
-//                fb.reference().child("wallets").child(mWallet.walletID);
-//            mainReference.set(mWallet.toJson()).then((result) {
-//              print(
-//                  '------_LoginPageState._getAuth--------------> updated fcmToken on existing wallet in firebase');
-//            });
-//          }
-//          Navigator.popAndPushNamed(context, '/account');
-//        } else {
-//          mWallet = new Wallet.create();
-//          mWallet.email = user.email;
-//          mWallet.name = user.displayName;
-//          mWallet.url = user.photoUrl;
-//          mWallet.uid = user.uid;
-//          _prepareWallet(cachedToken);
-//        }
-//      }
-//    } on PlatformException catch (e) {
-//      msg = "Failed to get auth: '${e.message}'.";
-//      print(msg);
-//    }
-//    return true;
-//  }
 
   Future<bool> _checkIfDebugVersion() async {
     if (debug) {

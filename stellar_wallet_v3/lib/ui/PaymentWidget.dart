@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:stellar_wallet_v3/data/Account.dart';
@@ -104,6 +105,15 @@ class _PaymentWidgetState extends State<MakePayment> {
     assert(destWallet != null);
     assert(myWallet != null);
     _showSnackbar("Submtting payment to Stellar Blockchain. Please wait");
+
+    if (myWallet.fcmToken == null) {
+      var _firebaseMessaging = new FirebaseMessaging();
+      myWallet.fcmToken = await _firebaseMessaging.getToken();
+      if (myWallet.fcmToken == null) {
+        print('_PaymentWidgetState._submitPayment FCM token missing');
+      }
+      SharedPrefs.saveWallet(myWallet);
+    }
     setState(() {
       isSubmitting = true;
     });

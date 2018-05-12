@@ -7,9 +7,9 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>394333124247-6hapde9ui980u80eqfb8spr8ugh7mrfm.apps.googleusercontent.com</string>
+	<string>394333124247-94r5jav63lj2rg04a639vfv44i123cef.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.394333124247-6hapde9ui980u80eqfb8spr8ugh7mrfm</string>
+	<string>com.googleusercontent.apps.394333124247-94r5jav63lj2rg04a639vfv44i123cef</string>
 	<key>API_KEY</key>
 	<string>AIzaSyAhJDY1my_QqVeU3VnmEdC-aDCQZOvn_YU</string>
 	<key>GCM_SENDER_ID</key>
@@ -17,7 +17,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.oneconnect.stellarWalletV3</string>
+	<string>com.oneconnect.walletv3</string>
 	<key>PROJECT_ID</key>
 	<string>blockchaindev-e50c8</string>
 	<key>STORAGE_BUCKET</key>
@@ -33,7 +33,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:394333124247:ios:31202b356183d26d</string>
+	<string>1:394333124247:ios:df53c65f3cb096f1</string>
 	<key>DATABASE_URL</key>
 	<string>https://blockchaindev-e50c8.firebaseio.com</string>
 </dict>

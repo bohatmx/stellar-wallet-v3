@@ -179,16 +179,7 @@ class _AccountDetailsState extends State<AccountDetails>
             "onMessage, AccountDetails: expecting wallet, payment or error mesage via FCM:\n: $message");
 
         var messageType = message["messageType"];
-//        if (messageType == "WALLET") {
-//          P.mprint(
-//              widget, "AccountDetails ***** Receiving WALLET ******** message");
-//          Map map = json.decode(message["json"]);
-//          Wallet w = new Wallet.fromJson(map);
-//          assert(w != null);
-//          print(
-//              '_AccountDetailsState._configMessaging: new wallet ${w.toJson()}');
-//          _encrypt(w);
-//        }
+
         if (messageType == "PAYMENT") {
           P.mprint(widget,
               "AccountDetails Receiving PAYMENT message )))))))))))))))))))))))))))))))))");
@@ -199,14 +190,7 @@ class _AccountDetailsState extends State<AccountDetails>
           payment.printDetails();
           receivedPayment(payment);
         }
-//        if (messageType == "WALLET_ERROR") {
-//          P.mprint(widget, "AccountDetails Receiving WALLET_ERROR message");
-//          P.mprint(widget,
-//              "What do we do now, Boss? wallet error, Chief ....maybe show a snackbar?");
-//
-//          _showSnackbar(
-//              "Wallet  could not be created, try again later. Sorry!");
-//        }
+
         if (messageType == "PAYMENT_ERROR") {
           P.mprint(widget,
               "AccountDetails Receiving PAYMENT_ERROR message ################");
@@ -236,10 +220,20 @@ class _AccountDetailsState extends State<AccountDetails>
       print("Settings registered: $settings");
     });
 
-    _firebaseMessaging.getToken().then((String token) {
+    _firebaseMessaging.getToken().then((String token) async {
       assert(token != null);
       SharedPrefs.saveFCMToken(token);
+      if (wallet != null && wallet.walletID != null) {
+        wallet.fcmToken = token;
+        await SharedPrefs.saveWallet(wallet);
+        final mainReference = fb.reference().child("wallets");
+        var ref = mainReference.child(wallet.walletID);
+        ref.set(wallet.toJson());
+        print('_AccountDetailsState._configMessaging wallet updated !!');
+      }
       P.mprint(widget, "FCM token just cached: $token");
+    }).catchError((e) {
+      print('_AccountDetailsState._configMessaging ERROR fcmToken update');
     });
   }
 
