@@ -17,6 +17,7 @@ Payment _$PaymentFromJson(Map<String, dynamic> json) => new Payment(
     receiving: json['receiving'] as bool,
     date: json['date'] as int,
     stringDate: json['stringDate'] as String,
+    success: json['success'] as bool,
     debug: json['debug'] as bool);
 
 abstract class _$PaymentSerializerMixin {
@@ -29,6 +30,7 @@ abstract class _$PaymentSerializerMixin {
   String get toFCMToken;
   String get fromFCMToken;
   bool get receiving;
+  bool get success;
   bool get debug;
   int get date;
   Map<String, dynamic> toJson() => <String, dynamic>{
@@ -41,6 +43,7 @@ abstract class _$PaymentSerializerMixin {
         'toFCMToken': toFCMToken,
         'fromFCMToken': fromFCMToken,
         'receiving': receiving,
+        'success': success,
         'debug': debug,
         'date': date
       };

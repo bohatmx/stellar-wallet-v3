@@ -41,7 +41,7 @@ FirebaseDatabase fb = FirebaseDatabase.instance;
 final FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
 
 class _AccountDetailsState extends State<AccountDetails>
-    with WidgetsBindingObserver {
+    with WidgetsBindingObserver, TickerProviderStateMixin {
   Account account;
   Wallet wallet;
   AccountPresenter presenter;
@@ -51,16 +51,13 @@ class _AccountDetailsState extends State<AccountDetails>
   String name;
   Image image;
   String balance;
-
   String paymentMessage;
-
-  //var _loadImage = new AssetImage('assets/girl.png');
-
   NetworkImage _profileImage = new NetworkImage(
       "https://firebasestorage.googleapis.com/v0/b/blockchaindev-e50c8.appspot.com/o/profilePictures%2Fblack_woman.jpg?alt=media&token=2858261a-db84-40af-a5a0-fd311d5723b5");
-  //bool _checkLoaded = true;
-
   double btnOpacity;
+
+  AnimationController controller;
+  Animation<double> actionAnimation;
 
   @override
   initState() {
@@ -68,6 +65,26 @@ class _AccountDetailsState extends State<AccountDetails>
         "......... initState .... configure Cloud Messaging and get fresh Account");
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    controller = AnimationController(
+      duration: Duration(milliseconds: 2000),
+      vsync: this,
+    );
+
+    controller.addStatusListener((listener) {
+      if (listener == AnimationStatus.forward) {
+        print('_AccountDetailsState.initState  ######### forward');
+      }
+      if (listener == AnimationStatus.reverse) {
+        print('_AccountDetailsState.initState  ######### reverse');
+      }
+      if (listener == AnimationStatus.completed) {
+        print('_AccountDetailsState.initState ######### completed ');
+      }
+      if (listener == AnimationStatus.dismissed) {
+        print('_AccountDetailsState.initState ######### dismissed');
+      }
+    });
+
     _configMessaging();
     initAudioPlayer();
     _profileImage.resolve(new ImageConfiguration()).addListener((_, __) {
@@ -97,8 +114,6 @@ class _AccountDetailsState extends State<AccountDetails>
         }
       });
 
-//      RecordsBag bag = new RecordsBag(list);
-//      FileUtil.savePayments(bag);
       records = list;
       var cnt = records.length;
       P.mprint(widget, '====================> found payment records: $cnt');
@@ -107,9 +122,10 @@ class _AccountDetailsState extends State<AccountDetails>
         P.mprint(
             widget,
             'lastPayment ${lastPayment.amount} to ${lastPayment
-            .to} from ${lastPayment.from}');
+                .to} from ${lastPayment.from}');
 
         setState(() {
+          count = '${records.length}';
           titleWidget = new TitleComponent(_scaffoldKey, records);
           if (wallet.accountID == lastPayment.to) {
             isReceived = true;
@@ -123,6 +139,16 @@ class _AccountDetailsState extends State<AccountDetails>
             paymentType = 1;
           }
         });
+        controller.forward();
+        if (controller.isCompleted) {
+          print(
+              '_AccountDetailsState.build I forward - controller.isCompleted #################');
+          controller.reverse();
+          if (controller.isCompleted) {
+            print(
+                '_AccountDetailsState.build II reverse - controller.isCompleted #################');
+          }
+        }
       }
     }
   }
@@ -169,6 +195,8 @@ class _AccountDetailsState extends State<AccountDetails>
     await EncryptionUtil.encryptSeed(w);
     refresh();
   }
+
+  DatabaseReference payRef, recRef;
 
   void _configMessaging() async {
     P.mprint(widget,
@@ -399,6 +427,7 @@ class _AccountDetailsState extends State<AccountDetails>
       }
     } catch (e) {
       P.mprint(widget, "Houston, we have a problem $e");
+      _showSnackbar('Unexpected error, may be network related');
     }
   }
 
@@ -586,12 +615,14 @@ class _AccountDetailsState extends State<AccountDetails>
     }
   }
 
+  var count;
   TitleComponent titleWidget;
 
   @override
   Widget build(BuildContext context) {
     ctx = context;
     titleWidget = new TitleComponent(_scaffoldKey, records);
+
     return new WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
@@ -600,31 +631,13 @@ class _AccountDetailsState extends State<AccountDetails>
           elevation: 8.0,
           leading: Container(),
           bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(160.0),
+            preferredSize: const Size.fromHeight(120.0),
             child: Theme(
               data: Theme.of(context).copyWith(accentColor: Colors.white),
               child: titleWidget,
             ),
           ),
           actions: <Widget>[
-            IconButton(
-              icon: Icon(FontAwesomeIcons.briefcase),
-              onPressed: () {
-                _startPaymentsList();
-              },
-            ),
-            IconButton(
-              icon: Icon(FontAwesomeIcons.qrcode),
-              onPressed: () {
-                _startScan();
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.refresh),
-              onPressed: () {
-                refresh();
-              },
-            ),
             IconButton(
               icon: Icon(Icons.brush),
               onPressed: _showThemeDialog,
@@ -635,11 +648,11 @@ class _AccountDetailsState extends State<AccountDetails>
           child: ListView(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(left: 20.0, top: 20.0),
+                padding: const EdgeInsets.only(left: 20.0, top: 10.0),
                 child: Text(
                   "Stellar Payments Network",
                   style: TextStyle(
-                      fontSize: 24.0,
+                      fontSize: 16.0,
                       fontWeight: FontWeight.w900,
                       fontFamily: 'Raleway',
                       color: Colors.grey.shade300),
@@ -666,12 +679,12 @@ class _AccountDetailsState extends State<AccountDetails>
                 child: Opacity(
                   opacity: btnOpacity == null ? 1.0 : 0.3,
                   child: Card(
-                    elevation: 2.0,
+                    elevation: 6.0,
                     child: Column(
                       children: <Widget>[
                         Padding(
                           padding: EdgeInsets.only(
-                              left: 0.0, top: 10.0, right: 0.0, bottom: 0.0),
+                              left: 0.0, top: 5.0, right: 0.0, bottom: 0.0),
                           child: Text(
                             "Current Balance",
                             style: TextStyle(
@@ -698,7 +711,7 @@ class _AccountDetailsState extends State<AccountDetails>
                                           ? "Balance"
                                           : _getBalance(),
                                       style: TextStyle(
-                                        fontSize: 36.0,
+                                        fontSize: 30.0,
                                         fontFamily: 'Raleway',
                                         fontWeight: FontWeight.w900,
                                       ),
@@ -766,12 +779,36 @@ class _AccountDetailsState extends State<AccountDetails>
                         ),
                         Padding(
                           padding: const EdgeInsets.only(
-                              left: 8.0, bottom: 50.0, top: 10.0),
+                              left: 8.0, bottom: 20.0, top: 10.0),
                           child: GestureDetector(
                             onTap: _startPaymentsList,
                             child: Text(
                               lastPayment == null ? '' : _formatDate(),
                               style: TextStyle(color: Colors.grey),
+                            ),
+                          ),
+                        ),
+                        Center(
+                          child: Container(
+                            child: new Padding(
+                              padding: const EdgeInsets.only(bottom: 20.0),
+                              child: new GestureDetector(
+                                onTap: _startPaymentsList,
+                                child: Chip(
+                                  label: Text(
+                                    'Payments',
+                                    style: TextStyle(fontSize: 10.0),
+                                  ),
+                                  avatar: CircleAvatar(
+                                    backgroundColor:
+                                        Theme.of(context).accentColor,
+                                    child: Text(
+                                      count == null ? '0' : count,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -800,17 +837,48 @@ class _AccountDetailsState extends State<AccountDetails>
             ],
           ),
         ),
+        bottomNavigationBar: BottomAppBar(
+          color: Theme.of(context).primaryColor,
+          elevation: 16.0,
+          child: ButtonBar(
+            alignment: MainAxisAlignment.center,
+            children: <Widget>[
+//              IconButton(
+//                icon: Icon(FontAwesomeIcons.briefcase),
+//                onPressed: () {
+//                  _startPaymentsList();
+//                },
+//              ),
+              IconButton(
+                icon: Icon(FontAwesomeIcons.qrcode),
+                onPressed: () {
+                  _startScan();
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.refresh),
+                onPressed: () {
+                  refresh();
+                },
+              ),
+            ],
+          ),
+        ),
         floatingActionButton: Opacity(
           opacity: btnOpacity == null ? 1.0 : 0.0,
           child: FloatingActionButton(
-            elevation: 16.0,
-            onPressed: startWalletList,
+            elevation: 32.0,
+            onPressed: () {
+              startWalletList();
+            },
             tooltip: 'Increment',
             child: Icon(FontAwesomeIcons.list),
           ),
         ),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+        floatingActionButtonAnimator: FAB(controller),
+      ),
+    ); // This trailing comma makes auto-formatting nicer for build methods.
   }
 
   String _formatAmount() {
@@ -873,6 +941,34 @@ class _AccountDetailsState extends State<AccountDetails>
     Navigator.push(
       ctx,
       MaterialPageRoute(builder: (context) => PresentQRCode()),
+    );
+  }
+}
+
+class FAB extends FloatingActionButtonAnimator {
+  final AnimationController controller;
+
+  FAB(this.controller);
+
+  @override
+  Offset getOffset({Offset begin, Offset end, double progress}) {
+    if (progress == 0.0) {
+      return begin;
+    } else {
+      return end;
+    }
+  }
+
+  @override
+  Animation<double> getRotationAnimation({Animation<double> parent}) {
+    return Tween<double>(begin: 1.0, end: -1.0).animate(controller);
+  }
+
+  @override
+  Animation<double> getScaleAnimation({Animation<double> parent}) {
+    return TrainHoppingAnimation(
+      Tween<double>(begin: 1.0, end: -1.0).animate(controller),
+      Tween<double>(begin: -1.0, end: 1.0).animate(controller),
     );
   }
 }

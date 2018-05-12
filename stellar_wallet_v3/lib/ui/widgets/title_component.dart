@@ -84,7 +84,7 @@ class _TitleComponentState extends State<TitleComponent> {
         child: new Column(
           children: <Widget>[
             new Padding(
-              padding: new EdgeInsets.only(top: 10.0, bottom: 20.0),
+              padding: new EdgeInsets.only(top: 0.0, bottom: 10.0),
               child: new GestureDetector(
                 child: new Text(
                   walletName == null ? "Name Unavailable?" : walletName,
@@ -92,7 +92,7 @@ class _TitleComponentState extends State<TitleComponent> {
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Raleway',
-                      fontSize: 24.0),
+                      fontSize: 18.0),
                 ),
                 onTap: _startQRMaker,
               ),

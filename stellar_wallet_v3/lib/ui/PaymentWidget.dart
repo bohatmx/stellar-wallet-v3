@@ -142,9 +142,104 @@ class _PaymentWidgetState extends State<MakePayment> {
     P.mprint(widget, "submitting following payment ..............");
     payment.printDetails();
 
-    reference.push().set(payment.toJson()).then((result) {
-      P.mprint(widget, "Firebase done adding payment");
-      _showSnackWithAction('Payment has been sent. Wait for confirmation');
+    //check if accountID node exists, write one if not
+    //push payment to accountID node
+    DatabaseReference acctRef =
+        fb.reference().child('payments').child(myWallet.accountID);
+    print(
+        '_PaymentWidgetState._submitPayment #############  acctRef: ${acctRef.reference().path}');
+    Query query = await acctRef.limitToLast(2);
+    var snap1 = await query.once();
+    if (snap1 != null && snap1.value != null) {
+      Map map = snap1.value;
+      print(
+          '_PaymentWidgetState._submitPayment after limit, list: ${map.length}');
+      print(
+          '_PaymentWidgetState._submitPayment account key: ${snap1.key} value ${snap1.value}');
+    } else {
+      print(
+          '_PaymentWidgetState._submitPayment account node: NOT FOUND - will add one');
+      await acctRef.set(myWallet.accountID);
+    }
+
+    print(
+        '_PaymentWidgetState._submitPayment - pushing payment to account node');
+    await acctRef.push().set(payment.toJson()).catchError((e) {
+      print(
+          '_PaymentWidgetState._submitPayment ERROR pushing payment  to account node');
+      _showSnackbar('Payment failed. Please try again later');
+    });
+    Query query2 = await acctRef.limitToLast(1);
+    var s = await query2.once();
+    Map m = s.value;
+    m.forEach((key, value) {
+      print('_PaymentWidgetState._submitPayment should be most recent: $value');
+      _listenForPayments(key);
+      _listenForReceipts(key);
+    });
+  }
+
+  DatabaseReference payRef, recRef;
+
+  void _listenForReceipts(String key) async {
+    if (myWallet == null || myWallet.accountID == null) {
+      print(
+          '_PaymentWidgetState._listenForReceipts - wallet or accountID is null');
+      return;
+    }
+    print(
+        '_PaymentWidgetState._listenForReceipts - listening for receipts ....');
+    recRef = fb.reference().child('payments').child(myWallet.accountID);
+    print(
+        '_PaymentWidgetState._listenForReceipts recRef: ${recRef.toString()}');
+    recRef
+        .orderByChild('destinationAccount')
+        .equalTo(myWallet.accountID)
+        .onChildChanged
+        .listen((event) async {
+      print(
+          '_PaymentWidgetState._listenForPayments - a payment has been RECEIVED, should refresh account and payments');
+      Map map = event.snapshot.value;
+      print('_PaymentWidgetState._listenForReceipts - map: $map');
+      bool success = map['success'];
+      if (success) {
+        _showSnackbar('Payment has been made ...');
+      }
+    });
+  }
+
+  _listenForPayments(String key) async {
+    if (myWallet == null || myWallet.accountID == null) {
+      print(
+          '_PaymentWidgetState._listenForReceipts - wallet or accountID is null');
+      return null;
+    }
+    print('_PaymentWidgetState._listenForPayments - listen for payments ....');
+    payRef =
+        fb.reference().child('payments').child(myWallet.accountID).child(key);
+    print(
+        '_PaymentWidgetState._listenForPayments payRef: ${payRef.reference().path}');
+    bool haveDataAlready = false;
+    payRef.onChildChanged.listen((event) async {
+      print(
+          '_PaymentWidgetState._listenForPayments payRef.onChildChanged - a payment has been MADE, maybe, should check success flag, refresh account and payments');
+      print(
+          '_PaymentWidgetState._listenForPayments - map: ${event.snapshot.value}');
+      if (!haveDataAlready) {
+        haveDataAlready = true;
+        var snap = await payRef.once();
+        print('_PaymentWidgetState._listenForPayments - latest version: ${snap
+                .value}');
+        Map mm = snap.value;
+        var payment = new Payment.fromJSON(mm);
+        assert(payment != null);
+        bool success = payment.success;
+        if (success) {
+          _showSnackbarOK('Payment of ${payment.amount} has been made OK');
+        } else {
+          _showSnackbar('Payment has failed');
+        }
+      }
     });
   }
 
@@ -161,6 +256,29 @@ class _PaymentWidgetState extends State<MakePayment> {
       ),
       duration: new Duration(minutes: 5),
       backgroundColor: Colors.indigo.shade800,
+    );
+
+    _scaffoldKey.currentState.showSnackBar(snackbar);
+  }
+
+  void _showSnackbarOK(String message) {
+    if (_scaffoldKey.currentState == null) {
+      return;
+    }
+    _scaffoldKey.currentState.hideCurrentSnackBar();
+    snackbar = new SnackBar(
+      content: new Text(
+        message,
+        style: new TextStyle(color: Colors.white),
+      ),
+      duration: new Duration(minutes: 5),
+      backgroundColor: Colors.teal.shade700,
+      action: SnackBarAction(
+        label: 'Done',
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
     );
 
     _scaffoldKey.currentState.showSnackBar(snackbar);
@@ -278,7 +396,7 @@ class _PaymentWidgetState extends State<MakePayment> {
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Raleway',
-                    fontSize: 28.0),
+                    fontSize: 24.0),
               ),
             ),
           ),
