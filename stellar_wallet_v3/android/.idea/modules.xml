@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/android.iml" filepath="$PROJECT_DIR$/android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/audioplayer-0.4.0/android/audioplayer.iml" filepath="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/audioplayer-0.4.0/android/audioplayer.iml" />
+      <module fileurl="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/device_info-0.2.0/android/device_info.iml" filepath="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/device_info-0.2.0/android/device_info.iml" />
+      <module fileurl="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/firebase_auth-0.5.9/android/firebase_auth.iml" filepath="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/firebase_auth-0.5.9/android/firebase_auth.iml" />
+      <module fileurl="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/firebase_core-0.2.3/android/firebase_core.iml" filepath="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/firebase_core-0.2.3/android/firebase_core.iml" />
+      <module fileurl="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/firebase_database-0.4.6/android/firebase_database.iml" filepath="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/firebase_database-0.4.6/android/firebase_database.iml" />
+      <module fileurl="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/firebase_messaging-0.2.5/android/firebase_messaging.iml" filepath="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/firebase_messaging-0.2.5/android/firebase_messaging.iml" />
+      <module fileurl="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/firebase_remote_config-0.0.2/android/firebase_remote_config.iml" filepath="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/firebase_remote_config-0.0.2/android/firebase_remote_config.iml" />
+      <module fileurl="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/firebase_storage-0.3.4/android/firebase_storage.iml" filepath="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/firebase_storage-0.3.4/android/firebase_storage.iml" />
+      <module fileurl="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/flutter_string_encryption-0.0.2/android/flutter_string_encryption.iml" filepath="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/flutter_string_encryption-0.0.2/android/flutter_string_encryption.iml" />
+      <module fileurl="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/google_sign_in-3.0.3/android/google_sign_in.iml" filepath="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/google_sign_in-3.0.3/android/google_sign_in.iml" />
+      <module fileurl="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/image_picker-0.3.1/android/image_picker.iml" filepath="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/image_picker-0.3.1/android/image_picker.iml" />
+      <module fileurl="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/path_provider-0.4.0/android/path_provider.iml" filepath="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/path_provider-0.4.0/android/path_provider.iml" />
+      <module fileurl="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/shared_preferences-0.4.1/android/shared_preferences.iml" filepath="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/shared_preferences-0.4.1/android/shared_preferences.iml" />
+      <module fileurl="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/zxing-0.0.4+1/android/zxing.iml" filepath="$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/zxing-0.0.4+1/android/zxing.iml" />
+    </modules>
+  </component>
+</project>

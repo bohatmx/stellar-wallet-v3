@@ -1,6 +1,5 @@
 name: stellar_wallet_v3
-description: A new Flutter project.
-description: A new Flutter project.
+description: Stellar Wallet App for Android and iOS.
 
 dependencies:
   flutter:
