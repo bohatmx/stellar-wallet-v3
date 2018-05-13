@@ -1,0 +1,687 @@
+{
+  "project_info": {
+    "project_number": "394333124247",
+    "firebase_url": "https://blockchaindev-e50c8.firebaseio.com",
+    "project_id": "blockchaindev-e50c8",
+    "storage_bucket": "blockchaindev-e50c8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:394333124247:android:f9c57bcbb6f7805b",
+        "android_client_info": {
+          "package_name": "com.aftarobot.bank"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "394333124247-sucqg7op4t1hl3jf6ndbac52ufv95n5t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBr5qmu2Kcdf-G38TfJSeh8ecj2NLkx6xw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:394333124247:android:74cfdee9c52f1a73",
+        "android_client_info": {
+          "package_name": "com.aftarobot.beneficiary"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "394333124247-sucqg7op4t1hl3jf6ndbac52ufv95n5t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBr5qmu2Kcdf-G38TfJSeh8ecj2NLkx6xw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:394333124247:android:dc54ac2deaadf88a",
+        "android_client_info": {
+          "package_name": "com.aftarobot.blockchaintest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "394333124247-atti640e2nr24ob131ev5fkld6l6dgt9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aftarobot.blockchaintest",
+            "certificate_hash": "3ef3aad7b9b47122a7f0cd4f8974846a928c99e0"
+          }
+        },
+        {
+          "client_id": "394333124247-sucqg7op4t1hl3jf6ndbac52ufv95n5t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBr5qmu2Kcdf-G38TfJSeh8ecj2NLkx6xw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "394333124247-6coici4ckvtt91sjkijgeba6d4mdl3pq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.oneconnect.testios"
+              }
+            },
+            {
+              "client_id": "394333124247-sucqg7op4t1hl3jf6ndbac52ufv95n5t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:394333124247:android:e56afd51c586bae6",
+        "android_client_info": {
+          "package_name": "com.aftarobot.client"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "394333124247-sucqg7op4t1hl3jf6ndbac52ufv95n5t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBr5qmu2Kcdf-G38TfJSeh8ecj2NLkx6xw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:394333124247:android:bae969415e535184",
+        "android_client_info": {
+          "package_name": "com.aftarobot.flutterapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "394333124247-7kejnpasnlg7d9sm7inljtbk9a8lho5b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aftarobot.flutterapp",
+            "certificate_hash": "c2a612e2c1c6c058f139ab260f5112807326ee17"
+          }
+        },
+        {
+          "client_id": "394333124247-sucqg7op4t1hl3jf6ndbac52ufv95n5t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBr5qmu2Kcdf-G38TfJSeh8ecj2NLkx6xw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "394333124247-6coici4ckvtt91sjkijgeba6d4mdl3pq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.oneconnect.testios"
+              }
+            },
+            {
+              "client_id": "394333124247-sucqg7op4t1hl3jf6ndbac52ufv95n5t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:394333124247:android:da1c840a44ab675e",
+        "android_client_info": {
+          "package_name": "com.aftarobot.homeaffairsv3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "394333124247-sucqg7op4t1hl3jf6ndbac52ufv95n5t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBr5qmu2Kcdf-G38TfJSeh8ecj2NLkx6xw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:394333124247:android:124183112a06dbc0",
+        "android_client_info": {
+          "package_name": "com.aftarobot.hospitalapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "394333124247-rufnhdks73ia10bpdck10bj6jj3q569a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aftarobot.hospitalapp",
+            "certificate_hash": "3ef3aad7b9b47122a7f0cd4f8974846a928c99e0"
+          }
+        },
+        {
+          "client_id": "394333124247-sucqg7op4t1hl3jf6ndbac52ufv95n5t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBr5qmu2Kcdf-G38TfJSeh8ecj2NLkx6xw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "394333124247-6coici4ckvtt91sjkijgeba6d4mdl3pq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.oneconnect.testios"
+              }
+            },
+            {
+              "client_id": "394333124247-sucqg7op4t1hl3jf6ndbac52ufv95n5t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:394333124247:android:c40eb98dc73f00a8",
+        "android_client_info": {
+          "package_name": "com.aftarobot.insurancecompany"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "394333124247-g70m8i2j9f0vq6atpdg3nfepqn1dhdl5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aftarobot.insurancecompany",
+            "certificate_hash": "3ef3aad7b9b47122a7f0cd4f8974846a928c99e0"
+          }
+        },
+        {
+          "client_id": "394333124247-sucqg7op4t1hl3jf6ndbac52ufv95n5t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBr5qmu2Kcdf-G38TfJSeh8ecj2NLkx6xw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "394333124247-6coici4ckvtt91sjkijgeba6d4mdl3pq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.oneconnect.testios"
+              }
+            },
+            {
+              "client_id": "394333124247-sucqg7op4t1hl3jf6ndbac52ufv95n5t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:394333124247:android:13b3dae8b2f47ce8",
+        "android_client_info": {
+          "package_name": "com.aftarobot.mlibrary"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "394333124247-sucqg7op4t1hl3jf6ndbac52ufv95n5t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBr5qmu2Kcdf-G38TfJSeh8ecj2NLkx6xw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:394333124247:android:a577ae2a05122924",
+        "android_client_info": {
+          "package_name": "com.aftarobot.parlourapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "394333124247-ckpid18gc4iea5qs4dnj5k3dot8u615l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aftarobot.parlourapp",
+            "certificate_hash": "3ef3aad7b9b47122a7f0cd4f8974846a928c99e0"
+          }
+        },
+        {
+          "client_id": "394333124247-sucqg7op4t1hl3jf6ndbac52ufv95n5t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBr5qmu2Kcdf-G38TfJSeh8ecj2NLkx6xw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "394333124247-6coici4ckvtt91sjkijgeba6d4mdl3pq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.oneconnect.testios"
+              }
+            },
+            {
+              "client_id": "394333124247-sucqg7op4t1hl3jf6ndbac52ufv95n5t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:394333124247:android:a1e3b6b9268505e0",
+        "android_client_info": {
+          "package_name": "com.aftarobot.regulator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "394333124247-ned6vgl0617d1h50fav3t29aocvj8p2s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aftarobot.regulator",
+            "certificate_hash": "c2a612e2c1c6c058f139ab260f5112807326ee17"
+          }
+        },
+        {
+          "client_id": "394333124247-sucqg7op4t1hl3jf6ndbac52ufv95n5t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBr5qmu2Kcdf-G38TfJSeh8ecj2NLkx6xw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "394333124247-6coici4ckvtt91sjkijgeba6d4mdl3pq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.oneconnect.testios"
+              }
+            },
+            {
+              "client_id": "394333124247-sucqg7op4t1hl3jf6ndbac52ufv95n5t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:394333124247:android:7fc4840a05044852",
+        "android_client_info": {
+          "package_name": "com.aftarobot.testfunctions"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "394333124247-sucqg7op4t1hl3jf6ndbac52ufv95n5t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBr5qmu2Kcdf-G38TfJSeh8ecj2NLkx6xw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:394333124247:android:c4fcb8674e5421b3",
+        "android_client_info": {
+          "package_name": "com.aftarobot.wallet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "394333124247-sucqg7op4t1hl3jf6ndbac52ufv95n5t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBr5qmu2Kcdf-G38TfJSeh8ecj2NLkx6xw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:394333124247:android:4d6c41d097d2dda7",
+        "android_client_info": {
+          "package_name": "com.oneconnect.stellarwalletv3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "394333124247-6t64p052vsrc84mh5vo3mmqugedsknqp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.oneconnect.stellarwalletv3",
+            "certificate_hash": "c2a612e2c1c6c058f139ab260f5112807326ee17"
+          }
+        },
+        {
+          "client_id": "394333124247-sucqg7op4t1hl3jf6ndbac52ufv95n5t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBr5qmu2Kcdf-G38TfJSeh8ecj2NLkx6xw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "394333124247-6coici4ckvtt91sjkijgeba6d4mdl3pq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.oneconnect.testios"
+              }
+            },
+            {
+              "client_id": "394333124247-sucqg7op4t1hl3jf6ndbac52ufv95n5t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:394333124247:android:64b68c92b662a182",
+        "android_client_info": {
+          "package_name": "com.oneconnect.testios"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "394333124247-s6ihrj2ndvbr5li2vgvh3cfumb6o5cta.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.oneconnect.testios",
+            "certificate_hash": "c2a612e2c1c6c058f139ab260f5112807326ee17"
+          }
+        },
+        {
+          "client_id": "394333124247-sucqg7op4t1hl3jf6ndbac52ufv95n5t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBr5qmu2Kcdf-G38TfJSeh8ecj2NLkx6xw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "394333124247-6coici4ckvtt91sjkijgeba6d4mdl3pq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.oneconnect.testios"
+              }
+            },
+            {
+              "client_id": "394333124247-sucqg7op4t1hl3jf6ndbac52ufv95n5t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:394333124247:android:2b87316259ea581d",
+        "android_client_info": {
+          "package_name": "com.oneconnect.walletapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "394333124247-3q9tidlp9203p9r7n2r2gfk052vavn1i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.oneconnect.walletapp",
+            "certificate_hash": "c2a612e2c1c6c058f139ab260f5112807326ee17"
+          }
+        },
+        {
+          "client_id": "394333124247-sucqg7op4t1hl3jf6ndbac52ufv95n5t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBr5qmu2Kcdf-G38TfJSeh8ecj2NLkx6xw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "394333124247-6coici4ckvtt91sjkijgeba6d4mdl3pq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.oneconnect.testios"
+              }
+            },
+            {
+              "client_id": "394333124247-sucqg7op4t1hl3jf6ndbac52ufv95n5t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
