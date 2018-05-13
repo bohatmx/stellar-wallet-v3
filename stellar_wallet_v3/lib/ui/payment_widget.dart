@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:stellar_wallet_v3/data/Account.dart';
 import 'package:stellar_wallet_v3/data/Payment.dart';
 import 'package:stellar_wallet_v3/data/Wallet.dart';
-import 'package:stellar_wallet_v3/ui/cccount_details.dart';
+import 'package:stellar_wallet_v3/ui/account_details.dart';
 import 'package:stellar_wallet_v3/util/comms.dart';
 import 'package:stellar_wallet_v3/util/constants.dart';
 import 'package:stellar_wallet_v3/util/encrypt_encrypt.dart';
@@ -111,7 +111,7 @@ class _PaymentWidgetState extends State<MakePayment>
 
     assert(destWallet != null);
     assert(myWallet != null);
-    _showSnackbar("Submtting payment to Stellar Blockchain. Please wait");
+    _showSnackWithBusy("Submitting payment. Please wait");
 
     if (myWallet.fcmToken == null) {
       var _firebaseMessaging = new FirebaseMessaging();
@@ -201,8 +201,9 @@ class _PaymentWidgetState extends State<MakePayment>
         '_PaymentWidgetState._listenForPayments payRef: ${payRef.reference().path}');
     bool haveDataAlready = false;
     payRef.onChildChanged.listen((event) async {
-      print(
-          '_PaymentWidgetState._listenForPayments payRef.onChildChanged - a payment has been MADE, maybe, should check success flag, refresh account and payments');
+      print('_PaymentWidgetState._listenForPayments payRef.onChildChanged - '
+          'a payment has been MADE, maybe, should check success flag, '
+          'refresh account and payments');
       print(
           '_PaymentWidgetState._listenForPayments - map: ${event.snapshot.value}');
       if (!haveDataAlready) {
@@ -215,7 +216,7 @@ class _PaymentWidgetState extends State<MakePayment>
         assert(payment != null);
         bool success = payment.success;
         if (success) {
-          _showSnackbarOK('Payment of ${payment.amount} has been made OK');
+          _showSnackbarOK('${payment.amount} XLM has been paid OK');
         } else {
           _showSnackbar('Payment has failed');
         }
@@ -247,9 +248,17 @@ class _PaymentWidgetState extends State<MakePayment>
     }
     _scaffoldKey.currentState.hideCurrentSnackBar();
     snackbar = new SnackBar(
-      content: new Text(
-        message,
-        style: new TextStyle(color: Colors.white),
+      content: new Row(
+        children: <Widget>[
+          new Padding(
+            padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+            child: Icon(Icons.done),
+          ),
+          new Text(
+            message,
+            style: new TextStyle(color: Colors.white),
+          ),
+        ],
       ),
       duration: new Duration(minutes: 5),
       backgroundColor: Colors.teal.shade700,
@@ -282,6 +291,29 @@ class _PaymentWidgetState extends State<MakePayment>
     );
 
     _scaffoldKey.currentState.showSnackBar(snackbar);
+  }
+
+  void _showSnackWithBusy(String message) {
+    print("trying to show snackBar ...");
+    if (_scaffoldKey.currentState == null) {
+      return;
+    }
+    _scaffoldKey.currentState.hideCurrentSnackBar();
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(
+      content: new Row(
+        children: <Widget>[
+          new CircularProgressIndicator(
+            strokeWidth: 2.0,
+            backgroundColor: Theme.of(context).accentColor,
+          ),
+          Text(
+            message,
+            style: new TextStyle(color: Colors.yellow),
+          ),
+        ],
+      ),
+      duration: new Duration(minutes: 5),
+    ));
   }
 
   void _showError(String message) {
@@ -382,111 +414,118 @@ class _PaymentWidgetState extends State<MakePayment>
           ),
         ),
       ),
-      body: new ListView(
-        children: <Widget>[
-          new Padding(
-            padding: new EdgeInsets.all(8.0),
-            child: new Container(
-              child: new SingleChildScrollView(
-                child: new Column(
-                  children: <Widget>[
-                    new Row(
+      body: new Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: new Card(
+          elevation: 4.0,
+          child: new ListView(
+            children: <Widget>[
+              new Padding(
+                padding: new EdgeInsets.all(8.0),
+                child: new Container(
+                  child: new SingleChildScrollView(
+                    child: new Column(
                       children: <Widget>[
-                        new Padding(
-                          padding: new EdgeInsets.all(4.0),
-                          child: new AnimatedAvatar(
-                            payeeUrl: payeeUrl,
-                            animation: animation,
-                          ),
+                        new Row(
+                          children: <Widget>[
+                            new Padding(
+                              padding: new EdgeInsets.all(4.0),
+                              child: new AnimatedAvatar(
+                                payeeUrl: payeeUrl,
+                                animation: animation,
+                              ),
+                            ),
+                            new Padding(
+                              padding: new EdgeInsets.all(8.0),
+                              child: new Text(
+                                destName == null ? "" : destName,
+                                style: new TextStyle(
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Raleway',
+                                    color: Colors.indigo.shade300),
+                              ),
+                            ),
+                          ],
+                        ),
+                        new Row(
+                          children: <Widget>[
+                            new Padding(
+                              padding: const EdgeInsets.only(left: 40.0),
+                              child: new Text(
+                                'Amount Requested:',
+                                style: new TextStyle(
+                                  fontSize: 14.0,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                            new Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: new Text(
+                                reqAmount == null ? '' : reqAmount,
+                                style: new TextStyle(
+                                  fontSize: 24.0,
+                                  color: Colors.teal,
+                                  fontFamily: 'Raleway',
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                         new Padding(
-                          padding: new EdgeInsets.all(8.0),
-                          child: new Text(
-                            destName == null ? "" : destName,
+                          padding: new EdgeInsets.only(
+                              top: 20.0, left: 20.0, right: 20.0, bottom: 20.0),
+                          child: new TextField(
+                            keyboardType: TextInputType.number,
+                            maxLength: 24,
+                            controller:
+                                reqAmount == '0.00' ? null : _controller,
+                            decoration: new InputDecoration(
+                              labelText: 'Amount to Pay',
+                            ),
+                            onChanged: _onTextChanged,
                             style: new TextStyle(
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w900,
                                 fontFamily: 'Raleway',
-                                color: Colors.indigo.shade300),
+                                fontSize: 24.0,
+                                color: Colors.pink),
                           ),
                         ),
-                      ],
-                    ),
-                    new Row(
-                      children: <Widget>[
-                        new Padding(
-                          padding: const EdgeInsets.only(left: 40.0),
-                          child: new Text(
-                            'Amount Requested:',
-                            style: new TextStyle(
-                              fontSize: 14.0,
-                              color: Colors.grey,
+                        RaisedButton(
+                          onPressed: isSubmitting ? null : _submitPayment,
+                          elevation: 12.0,
+                          splashColor: Colors.blue,
+                          disabledTextColor: Colors.indigo.shade100,
+                          child: new Padding(
+                            padding: new EdgeInsets.all(10.0),
+                            child: new Text(
+                              "Send Payment",
+                              style: new TextStyle(
+                                  color: Colors.pink,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20.0),
                             ),
                           ),
                         ),
                         new Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: new Text(
-                            reqAmount == null ? '' : reqAmount,
-                            style: new TextStyle(
-                              fontSize: 24.0,
-                              color: Colors.teal,
-                              fontFamily: 'Raleway',
-                              fontWeight: FontWeight.w900,
-                            ),
+                            destName == null
+                                ? _startFB()
+                                : 'Copyright OneConnect 2018',
+                            style: new TextStyle(fontSize: 10.0),
                           ),
                         ),
                       ],
                     ),
-                    new Padding(
-                      padding: new EdgeInsets.only(
-                          top: 30.0, left: 30.0, right: 30.0, bottom: 20.0),
-                      child: new TextField(
-                        keyboardType: TextInputType.number,
-                        maxLength: 28,
-                        controller: reqAmount == '0.00' ? null : _controller,
-                        decoration: new InputDecoration(
-                          labelText: 'Amount to Pay',
-                        ),
-                        onChanged: _onTextChanged,
-                        style: new TextStyle(
-                            fontWeight: FontWeight.w900,
-                            fontFamily: 'Raleway',
-                            fontSize: 36.0,
-                            color: Colors.pink),
-                      ),
-                    ),
-                    RaisedButton(
-                      onPressed: isSubmitting ? null : _submitPayment,
-                      elevation: 12.0,
-                      splashColor: Colors.blue,
-                      disabledTextColor: Colors.indigo.shade100,
-                      child: new Padding(
-                        padding: new EdgeInsets.all(10.0),
-                        child: new Text(
-                          "Send Payment",
-                          style: new TextStyle(
-                              color: Colors.pink,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20.0),
-                        ),
-                      ),
-                    ),
-                    new Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: new Text(
-                        destName == null
-                            ? _startFB()
-                            : 'Copyright OneConnect 2018',
-                        style: new TextStyle(fontSize: 10.0),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

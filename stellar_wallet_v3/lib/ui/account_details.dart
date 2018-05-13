@@ -12,7 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:stellar_wallet_v3/contracts/AccountContract.dart';
+import 'package:stellar_wallet_v3/contracts/contracts.dart';
 import 'package:stellar_wallet_v3/data/Account.dart';
 import 'package:stellar_wallet_v3/data/Payment.dart';
 import 'package:stellar_wallet_v3/data/PaymentFailed.dart';
@@ -129,12 +129,11 @@ class _AccountDetailsState extends State<AccountDetails>
           titleWidget = new TitleComponent(_scaffoldKey, records);
           if (wallet.accountID == lastPayment.to) {
             isReceived = true;
-            P.mprint(widget,
-                '############# RECEIVED PAYMENT isReceived: $isReceived');
+            P.mprint(
+                widget, '############# RECEIVED PAYMENT flag: $isReceived');
             paymentType = 2;
           } else {
-            P.mprint(
-                widget, '############# MADE PAYMENT isReceived: $isReceived');
+            P.mprint(widget, '############# MADE PAYMENT flag: $isReceived');
             isReceived = false;
             paymentType = 1;
           }
@@ -409,7 +408,7 @@ class _AccountDetailsState extends State<AccountDetails>
   void refresh() async {
     P.mprint(widget,
         '----------- refreshing account -------------------------------------');
-    _showSnackbar("Loading account detail");
+    _showSnackbarWithBusy("Loading account detail");
     try {
       wallet = await SharedPrefs.getWallet();
       if (wallet != null) {
@@ -447,6 +446,31 @@ class _AccountDetailsState extends State<AccountDetails>
       content: new Text(
         message,
         style: new TextStyle(color: Colors.white),
+      ),
+      duration: new Duration(seconds: 30),
+    ));
+  }
+
+  void _showSnackbarWithBusy(String message) {
+    print('_AccountDetailsState._showSnackbar - trying to show snackBar ..."');
+    if (_scaffoldKey.currentState == null) {
+      print(
+          '_AccountDetailsState._showSnackbar _scaffoldKey.currentState == null - no snackbar possible');
+      return;
+    }
+    _scaffoldKey.currentState.hideCurrentSnackBar();
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(
+      content: new Row(
+        children: <Widget>[
+          new CircularProgressIndicator(
+            strokeWidth: 3.0,
+            backgroundColor: Theme.of(context).primaryColor,
+          ),
+          Text(
+            message,
+            style: new TextStyle(color: Colors.white),
+          ),
+        ],
       ),
       duration: new Duration(seconds: 30),
     ));

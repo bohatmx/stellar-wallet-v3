@@ -6,8 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:stellar_wallet_v3/data/Account.dart';
 import 'package:stellar_wallet_v3/data/Wallet.dart';
-import 'package:stellar_wallet_v3/ui/walletlist_signin.dart';
-import 'package:stellar_wallet_v3/util/Auth.dart';
+import 'package:stellar_wallet_v3/util/auth.dart';
 import 'package:stellar_wallet_v3/util/comms.dart';
 import 'package:stellar_wallet_v3/util/constants.dart';
 import 'package:stellar_wallet_v3/util/encrypt_encrypt.dart';
@@ -238,6 +237,8 @@ class _LoginPageState extends State<LoginPage> {
         mWallet.uid = user.uid;
         _prepareWallet();
       }
+    } else {
+      _showSnak('Failed to authenticate.  Please try  again later');
     }
     return null;
   }
@@ -339,28 +340,6 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           ),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 10.0),
-              child: Opacity(
-                opacity: debug != null ? 1.0 : 0.0,
-                child: RaisedButton(
-                  elevation: 8.0,
-                  onPressed: _listWallets,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      'Select User From List',
-                      style: TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'Raleway'),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          )
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -368,15 +347,6 @@ class _LoginPageState extends State<LoginPage> {
         tooltip: 'Authenticate',
         child: Icon(Icons.lock),
       ),
-    );
-  }
-
-  void _listWallets() async {
-    final FirebaseUser user = await _auth.signInAnonymously();
-    print('user signed in: ${user.email}');
-    Navigator.push(
-      ctx,
-      new MaterialPageRoute(builder: (context) => new WalletListSignIn()),
     );
   }
 }

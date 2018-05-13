@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:stellar_wallet_v3/data/Record.dart';
 import 'package:stellar_wallet_v3/data/Wallet.dart';
-import 'package:stellar_wallet_v3/ui/cccount_details.dart';
+import 'package:stellar_wallet_v3/ui/account_details.dart';
 import 'package:stellar_wallet_v3/ui/payment_widget.dart';
 import 'package:stellar_wallet_v3/ui/picture_grid.dart';
 import 'package:stellar_wallet_v3/ui/present_qrcode.dart';

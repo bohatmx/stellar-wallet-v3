@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:stellar_wallet_v3/data/Wallet.dart';
-import 'package:stellar_wallet_v3/ui/wallet_list.dart';
 import 'package:stellar_wallet_v3/ui/payment_widget.dart';
+import 'package:stellar_wallet_v3/ui/wallet_list.dart';
 
 BuildContext ctx;
 final FirebaseDatabase fb = FirebaseDatabase.instance;
