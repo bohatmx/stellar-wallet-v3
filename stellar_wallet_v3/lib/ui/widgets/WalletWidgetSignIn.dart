@@ -4,7 +4,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:stellar_wallet_v3/data/Wallet.dart';
-import 'package:stellar_wallet_v3/util/SharedPrefs.dart';
+import 'package:stellar_wallet_v3/util/shared_prefs.dart';
 
 BuildContext ctx;
 final FirebaseDatabase fb = FirebaseDatabase.instance;

@@ -6,13 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:stellar_wallet_v3/data/Account.dart';
 import 'package:stellar_wallet_v3/data/Wallet.dart';
-import 'package:stellar_wallet_v3/ui/WalletListSignIn.dart';
+import 'package:stellar_wallet_v3/ui/walletlist_signin.dart';
 import 'package:stellar_wallet_v3/util/Auth.dart';
-import 'package:stellar_wallet_v3/util/Comms.dart';
-import 'package:stellar_wallet_v3/util/Printer.dart';
-import 'package:stellar_wallet_v3/util/SharedPrefs.dart';
+import 'package:stellar_wallet_v3/util/comms.dart';
 import 'package:stellar_wallet_v3/util/constants.dart';
 import 'package:stellar_wallet_v3/util/encrypt_encrypt.dart';
+import 'package:stellar_wallet_v3/util/printer.dart';
+import 'package:stellar_wallet_v3/util/shared_prefs.dart';
 
 //TODO - remove hard coded source account - put it into RemoteConfig
 const ACCOUNT_ID = "GC2IIOTVHC4XVNRI57JKNMDFEHZENM3Q5WJ2F5AVD7H3GDWEGPK7X3ZR",
@@ -91,6 +91,29 @@ class _LoginPageState extends State<LoginPage> {
       return null;
     }
     return null;
+  }
+
+  void _showSnackWithBusy(String message) {
+    print("trying to show snackBar ...");
+    if (_scaffoldKey.currentState == null) {
+      return;
+    }
+    _scaffoldKey.currentState.hideCurrentSnackBar();
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(
+      content: new Row(
+        children: <Widget>[
+          new CircularProgressIndicator(
+            strokeWidth: 2.0,
+            backgroundColor: Colors.red,
+          ),
+          Text(
+            message,
+            style: new TextStyle(color: Colors.yellow),
+          ),
+        ],
+      ),
+      duration: new Duration(minutes: 5),
+    ));
   }
 
   void _showSnak(String message) {
@@ -183,8 +206,16 @@ class _LoginPageState extends State<LoginPage> {
   static const platform1 = const MethodChannel('com.oneconnect.wallet/auth');
   static const platform2 = const MethodChannel('com.oneconnect.wallet/debug');
 
+  bool isSigningIn = false;
   Future<FirebaseUser> _getAuth() async {
+    if (isSigningIn) {
+      return null;
+    }
     print('_LoginPageState._getAuth ... getting auth');
+    _showSnackWithBusy('Authentication going on ... please wait');
+    setState(() {
+      isSigningIn = true;
+    });
     var authUtil = new MyAuth();
     FirebaseUser user = await authUtil.signInWithGoogle();
     if (user != null) {

@@ -7,8 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:stellar_wallet_v3/data/Wallet.dart';
-import 'package:stellar_wallet_v3/util/Printer.dart';
-import 'package:stellar_wallet_v3/util/SharedPrefs.dart';
+import 'package:stellar_wallet_v3/util/printer.dart';
+import 'package:stellar_wallet_v3/util/shared_prefs.dart';
 
 class PresentQRCode extends StatefulWidget {
   @override

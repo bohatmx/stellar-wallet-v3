@@ -8,11 +8,11 @@ import 'package:stellar_wallet_v3/data/Account.dart';
 import 'package:stellar_wallet_v3/data/Payment.dart';
 import 'package:stellar_wallet_v3/data/Wallet.dart';
 import 'package:stellar_wallet_v3/ui/cccount_details.dart';
-import 'package:stellar_wallet_v3/util/Comms.dart';
-import 'package:stellar_wallet_v3/util/Printer.dart';
-import 'package:stellar_wallet_v3/util/SharedPrefs.dart';
+import 'package:stellar_wallet_v3/util/comms.dart';
 import 'package:stellar_wallet_v3/util/constants.dart';
 import 'package:stellar_wallet_v3/util/encrypt_encrypt.dart';
+import 'package:stellar_wallet_v3/util/printer.dart';
+import 'package:stellar_wallet_v3/util/shared_prefs.dart';
 
 class MakePayment extends StatefulWidget {
   final Wallet wallet;
@@ -26,7 +26,8 @@ class MakePayment extends StatefulWidget {
 const bool DEBUGGING = true;
 BuildContext ctx;
 
-class _PaymentWidgetState extends State<MakePayment> {
+class _PaymentWidgetState extends State<MakePayment>
+    with TickerProviderStateMixin {
   Wallet destWallet;
 
   final FirebaseDatabase fb = FirebaseDatabase.instance;
@@ -43,13 +44,18 @@ class _PaymentWidgetState extends State<MakePayment> {
   bool isSubmitting = false;
   String walletID;
   String destName, destAcct;
+  AnimationController controller;
+  Animation<double> animation;
 
   @override
   initState() {
     super.initState();
     P.mprint(widget,
         '******************************** initState *********************');
-
+    controller = new AnimationController(
+        duration: const Duration(milliseconds: 1000), vsync: this);
+    animation = new Tween(begin: 0.0, end: 72.0).animate(controller);
+    controller.forward();
     _getMyWallet();
   }
 
@@ -136,6 +142,7 @@ class _PaymentWidgetState extends State<MakePayment> {
         memo: 'FlutterWallet',
         toFCMToken: destWallet.fcmToken,
         fromFCMToken: myWallet.fcmToken,
+        success: false,
         date: new DateTime.now().millisecondsSinceEpoch,
         stringDate: new DateTime.now().toIso8601String(),
         debug: debug);
@@ -176,38 +183,10 @@ class _PaymentWidgetState extends State<MakePayment> {
     m.forEach((key, value) {
       print('_PaymentWidgetState._submitPayment should be most recent: $value');
       _listenForPayments(key);
-      _listenForReceipts(key);
     });
   }
 
   DatabaseReference payRef, recRef;
-
-  void _listenForReceipts(String key) async {
-    if (myWallet == null || myWallet.accountID == null) {
-      print(
-          '_PaymentWidgetState._listenForReceipts - wallet or accountID is null');
-      return;
-    }
-    print(
-        '_PaymentWidgetState._listenForReceipts - listening for receipts ....');
-    recRef = fb.reference().child('payments').child(myWallet.accountID);
-    print(
-        '_PaymentWidgetState._listenForReceipts recRef: ${recRef.toString()}');
-    recRef
-        .orderByChild('destinationAccount')
-        .equalTo(myWallet.accountID)
-        .onChildChanged
-        .listen((event) async {
-      print(
-          '_PaymentWidgetState._listenForPayments - a payment has been RECEIVED, should refresh account and payments');
-      Map map = event.snapshot.value;
-      print('_PaymentWidgetState._listenForReceipts - map: $map');
-      bool success = map['success'];
-      if (success) {
-        _showSnackbar('Payment has been made ...');
-      }
-    });
-  }
 
   _listenForPayments(String key) async {
     if (myWallet == null || myWallet.accountID == null) {
@@ -415,11 +394,9 @@ class _PaymentWidgetState extends State<MakePayment> {
                       children: <Widget>[
                         new Padding(
                           padding: new EdgeInsets.all(4.0),
-                          child: new CircleAvatar(
-                            backgroundImage: new NetworkImage(
-                                payeeUrl == null ? url : payeeUrl),
-                            radius: 36.0,
-                            backgroundColor: Colors.black,
+                          child: new AnimatedAvatar(
+                            payeeUrl: payeeUrl,
+                            animation: animation,
                           ),
                         ),
                         new Padding(
@@ -531,4 +508,29 @@ class PaymentResult {
   String name, accountID, amount;
 
   PaymentResult({this.success, this.name, this.accountID, this.amount});
+}
+
+class AnimatedAvatar extends AnimatedWidget {
+  final String payeeUrl;
+  final String url =
+      "https://firebasestorage.googleapis.com/v0/b/blockchaindev-e50c8.appspot.com/o/profilePictures%2Fblack_woman.jpg?alt=media&token=2858261a-db84-40af-a5a0-fd311d5723b5";
+
+  AnimatedAvatar({Key key, this.payeeUrl, Animation<double> animation})
+      : super(key: key, listenable: animation);
+
+  Widget build(BuildContext context) {
+    final Animation<double> animation = listenable;
+    return new Center(
+      child: new Container(
+        margin: new EdgeInsets.symmetric(vertical: 10.0),
+        height: animation.value,
+        width: animation.value,
+        child: new CircleAvatar(
+          backgroundImage: new NetworkImage(payeeUrl == null ? url : payeeUrl),
+          radius: 36.0,
+          backgroundColor: Colors.black,
+        ),
+      ),
+    );
+  }
 }

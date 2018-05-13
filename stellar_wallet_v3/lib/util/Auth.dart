@@ -6,8 +6,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:stellar_wallet_v3/data/Wallet.dart';
-import 'package:stellar_wallet_v3/util/SharedPrefs.dart';
 import 'package:stellar_wallet_v3/util/constants.dart';
+import 'package:stellar_wallet_v3/util/shared_prefs.dart';
 
 class MyAuth {
   final FirebaseAuth _auth = FirebaseAuth.instance;

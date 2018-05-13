@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:stellar_wallet_v3/data/Record.dart';
-import 'package:stellar_wallet_v3/ui/PaymentList.dart';
+import 'package:stellar_wallet_v3/ui/payment_list.dart';
 
 class RecordWidget extends StatelessWidget {
   final Record record;

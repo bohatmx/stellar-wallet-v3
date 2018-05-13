@@ -24,7 +24,7 @@ class Communications {
       var jx = await response.transform(utf8.decoder).join();
       Map data = json.decode(jx);
       acct = new Account.fromJson(data);
-      print("****** Stellar Account from network: $data");
+      print("****** Stellar Account from network: ${data['account_id']}");
     } else {
       var code = response.statusCode;
       var msg = 'Bad Stellar HTTP status code: $code';

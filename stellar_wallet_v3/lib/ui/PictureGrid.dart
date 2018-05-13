@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stellar_wallet_v3/util/SharedPrefs.dart';
+import 'package:stellar_wallet_v3/util/shared_prefs.dart';
 
 BuildContext ctx;
 

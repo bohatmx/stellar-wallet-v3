@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:stellar_wallet_v3/util/SharedPrefs.dart';
+import 'package:stellar_wallet_v3/util/shared_prefs.dart';
 
 class MyThemes {
   static List<ThemeData> themes = new List<ThemeData>();

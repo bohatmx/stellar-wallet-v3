@@ -6,12 +6,12 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:stellar_wallet_v3/data/Record.dart';
 import 'package:stellar_wallet_v3/data/Wallet.dart';
-import 'package:stellar_wallet_v3/ui/PaymentWidget.dart';
 import 'package:stellar_wallet_v3/ui/PictureGrid.dart';
 import 'package:stellar_wallet_v3/ui/PresentQRCode.dart';
 import 'package:stellar_wallet_v3/ui/cccount_details.dart';
-import 'package:stellar_wallet_v3/util/Printer.dart';
-import 'package:stellar_wallet_v3/util/SharedPrefs.dart';
+import 'package:stellar_wallet_v3/ui/payment_widget.dart';
+import 'package:stellar_wallet_v3/util/printer.dart';
+import 'package:stellar_wallet_v3/util/shared_prefs.dart';
 import 'package:zxing/zxing.dart';
 
 class TitleComponent extends StatefulWidget {
@@ -67,11 +67,7 @@ class _TitleComponentState extends State<TitleComponent> {
       _scaffoldKey = widget._scaffoldKey;
       if (wallet != null) {}
     } else {
-      if (wallet == null) {
-        print(
-            '_TitleComponentState.build ========================== wallet is NULL');
-      } else {
-        print('_TitleComponentState.build -------------- wallet is not null');
+      if (wallet == null) {} else {
         if (wallet.url != null) {
           _profileImage = new NetworkImage(wallet.url);
         }

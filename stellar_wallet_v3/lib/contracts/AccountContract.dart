@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:stellar_wallet_v3/data/Account.dart';
-import 'package:stellar_wallet_v3/util/Comms.dart';
+import 'package:stellar_wallet_v3/util/comms.dart';
 
 abstract class Presenter {
   Future getAccount(String accountID);

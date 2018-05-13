@@ -18,14 +18,14 @@ import 'package:stellar_wallet_v3/data/Payment.dart';
 import 'package:stellar_wallet_v3/data/PaymentFailed.dart';
 import 'package:stellar_wallet_v3/data/Record.dart';
 import 'package:stellar_wallet_v3/data/Wallet.dart';
-import 'package:stellar_wallet_v3/ui/PaymentList.dart';
 import 'package:stellar_wallet_v3/ui/PresentQRCode.dart';
+import 'package:stellar_wallet_v3/ui/payment_list.dart';
 import 'package:stellar_wallet_v3/ui/sign_in.dart';
 import 'package:stellar_wallet_v3/ui/widgets/title_component.dart';
-import 'package:stellar_wallet_v3/util/Comms.dart';
-import 'package:stellar_wallet_v3/util/Printer.dart';
-import 'package:stellar_wallet_v3/util/SharedPrefs.dart';
+import 'package:stellar_wallet_v3/util/comms.dart';
 import 'package:stellar_wallet_v3/util/encrypt_encrypt.dart';
+import 'package:stellar_wallet_v3/util/printer.dart';
+import 'package:stellar_wallet_v3/util/shared_prefs.dart';
 
 class AccountDetails extends StatefulWidget {
   @override

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:stellar_wallet_v3/data/Record.dart';
-import 'package:stellar_wallet_v3/data/RecordsBag.dart';
 import 'package:stellar_wallet_v3/data/Wallet.dart';
-import 'package:stellar_wallet_v3/ui/widgets/BagWidget.dart';
 import 'package:stellar_wallet_v3/ui/widgets/RecordWidget.dart';
-import 'package:stellar_wallet_v3/util/Comms.dart';
-import 'package:stellar_wallet_v3/util/FileUtil.dart';
-import 'package:stellar_wallet_v3/util/Printer.dart';
+import 'package:stellar_wallet_v3/ui/widgets/bag.dart';
+import 'package:stellar_wallet_v3/util/comms.dart';
+import 'package:stellar_wallet_v3/util/file_util.dart';
+import 'package:stellar_wallet_v3/util/printer.dart';
 
 class PaymentList extends StatefulWidget {
   final List<Record> records;
@@ -80,7 +79,7 @@ class _PaymentState extends State<PaymentList> {
     records = await comms.getPayments(wallet.accountID);
 
     filter();
-    RecordsBag bag = new RecordsBag(records);
+    //RecordsBag bag = new RecordsBag(records);
     //FileUtil.savePayments(bag);
     records = listAll;
     var cnt = records.length;

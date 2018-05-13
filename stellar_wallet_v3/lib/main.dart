@@ -6,10 +6,10 @@ import 'package:stellar_wallet_v3/data/Wallet.dart';
 import 'package:stellar_wallet_v3/ui/WalletList.dart';
 import 'package:stellar_wallet_v3/ui/cccount_details.dart';
 import 'package:stellar_wallet_v3/ui/sign_in.dart';
-import 'package:stellar_wallet_v3/ui/widgets/BagWidget.dart';
-import 'package:stellar_wallet_v3/util/MyThemes.dart';
-import 'package:stellar_wallet_v3/util/Printer.dart';
-import 'package:stellar_wallet_v3/util/SharedPrefs.dart';
+import 'package:stellar_wallet_v3/ui/widgets/bag.dart';
+import 'package:stellar_wallet_v3/util/printer.dart';
+import 'package:stellar_wallet_v3/util/shared_prefs.dart';
+import 'package:stellar_wallet_v3/util/themes.dart';
 
 void main() => runApp(new TheApp());
 
