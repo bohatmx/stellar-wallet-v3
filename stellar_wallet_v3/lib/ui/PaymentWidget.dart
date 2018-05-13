@@ -73,6 +73,7 @@ class _PaymentWidgetState extends State<MakePayment> {
   }
 
   _submitPayment() async {
+    FocusScope.of(context).requestFocus(new FocusNode());
     if (isSubmitting) {
       _ignore();
       return;

@@ -63,6 +63,10 @@ class SharedPrefs {
   }
 
   static Future saveWallet(Wallet wallet) async {
+    if (wallet == null) {
+      print('SharedPrefs.saveWallet - wallet is null - QUIT');
+      return null;
+    }
     print("SharedPrefs - saving wallet data .........");
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Map map = wallet.toJson();

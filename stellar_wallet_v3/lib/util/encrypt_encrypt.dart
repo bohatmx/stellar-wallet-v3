@@ -12,32 +12,44 @@ class EncryptionUtil {
     print(
         'EncryptionUtil ## setting up encryption of seed #######################');
     wallet.password = getPassword();
+    //todo encryption bypass - fix when plugin is OK
+    if (wallet != null) {
+      return wallet;
+    }
 
-    final cryptor = new PlatformStringCryptor();
-    final String salt = await cryptor.generateSalt();
-    final String key =
-        await cryptor.generateKeyFromPassword(wallet.password, salt);
-    final encrypted = await cryptor.encrypt(wallet.seed, key);
-    final decrypted = await cryptor.decrypt(encrypted, key);
+    try {
+      final cryptor = new PlatformStringCryptor();
+      final String salt = await cryptor.generateSalt();
+      final String key =
+          await cryptor.generateKeyFromPassword(wallet.password, salt);
+      final encrypted = await cryptor.encrypt(wallet.seed, key);
+      final decrypted = await cryptor.decrypt(encrypted, key);
 
-    assert(decrypted == wallet.seed);
-    print('========================> encrypted: $encrypted');
-    print('========================> decrypted: $decrypted');
-    wallet.seed = encrypted;
-    wallet.isEncrypted = true;
-    wallet.salt = salt;
-    var fb = FirebaseDatabase.instance;
-    var ref = fb.reference().child('wallets').child(wallet.walletID);
-    await ref.set(wallet.toJson());
+      assert(decrypted == wallet.seed);
+      print('========================> encrypted: $encrypted');
+      print('========================> decrypted: $decrypted');
+      wallet.seed = encrypted;
+      wallet.isEncrypted = true;
+      wallet.salt = salt;
+      var fb = FirebaseDatabase.instance;
+      var ref = fb.reference().child('wallets').child(wallet.walletID);
+      await ref.set(wallet.toJson());
 
-    await SharedPrefs.saveWallet(wallet);
-    print(
-        'EncryptionUtil encryptSeed ## seed encrypted and saved on firebase and sharedPrefs ######################');
-
+      await SharedPrefs.saveWallet(wallet);
+      print(
+          'EncryptionUtil encryptSeed ## seed encrypted and saved on firebase and sharedPrefs ######################');
+    } catch (e) {
+      print('EncryptionUtil.encryptSeed ERROR $e');
+      return null;
+    }
     return wallet;
   }
 
   static Future<String> decryptSeed(Wallet wallet) async {
+    //todo decryption bypass - fix when plugin is OK
+    if (wallet != null) {
+      return wallet.seed;
+    }
     final cryptor = new PlatformStringCryptor();
     final String key =
         await cryptor.generateKeyFromPassword(wallet.password, wallet.salt);

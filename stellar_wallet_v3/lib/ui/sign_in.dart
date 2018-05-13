@@ -15,8 +15,8 @@ import 'package:stellar_wallet_v3/util/constants.dart';
 import 'package:stellar_wallet_v3/util/encrypt_encrypt.dart';
 
 //TODO - remove hard coded source account - put it into RemoteConfig
-const ACCOUNT_ID = "GDDW5XOQCSRBCHLD4DPZB52F67TWJWTNEQJD4REW27ZFCDFVV7TMWIQM",
-    SECRET = "SBJGQ5FYIBJPCIM7FK5E4MIYSLRUOQ3QIU3DTQFE7EATJVQP6MLXXY47";
+const ACCOUNT_ID = "GC2IIOTVHC4XVNRI57JKNMDFEHZENM3Q5WJ2F5AVD7H3GDWEGPK7X3ZR",
+    SECRET = "SCH5WWRI4EBVS3A4FINZ53M4T2N4J3JLKC4FLLQNEH64LSBOTT3DMA3W";
 
 class LoginPage extends StatefulWidget {
   @override
@@ -40,8 +40,7 @@ class _LoginPageState extends State<LoginPage> {
 
   final bool debug = Constants.debug;
 
-  Future _prepareWallet(String cachedToken) async {
-    mWallet.fcmToken = cachedToken;
+  Future _prepareWallet() async {
     Communications comms = Communications();
     Account acct = await comms.getAccount(ACCOUNT_ID);
     assert(acct != null);
@@ -55,7 +54,6 @@ class _LoginPageState extends State<LoginPage> {
     await _addWallet();
   }
 
-  // ignore: missing_return
   Future<Wallet> _findExistingWallet(FirebaseUser user) async {
     final qReference =
         fb.reference().child("wallets").orderByChild('uid').equalTo(user.uid);
@@ -67,20 +65,22 @@ class _LoginPageState extends State<LoginPage> {
         return null;
       }
       maps.forEach((key, value) {
-        var walletID = value['walletID'];
-        print('########################## walletID = $walletID');
-        print('_LoginPageState._findExistingWallet key $key value  $value');
-        // Map<dynamic, dynamic> map = value;
-        var id = value['walletIF'];
-        print("walletID: $id");
+        print(
+            '########################## _LoginPageState._findExistingWallet FOUND!!! key $key value  $value');
         try {
-          mWallet = new Wallet.fromJson(value);
+          mWallet = new Wallet.fromJSON(value);
           assert(mWallet != null);
           mWallet.walletID = key;
-          print('++++++++++ existing wallet found: ${mWallet.walletID}');
-          print(mWallet.toJson());
+          if (mWallet.success) {
+            return mWallet;
+          } else {
+            var ref = fb.reference().child('wallets').child(key);
+            ref.remove();
+            return null;
+          }
         } catch (e) {
           print(e);
+          _showSnak('Wallet creation failed');
           return null;
         }
 
@@ -90,6 +90,7 @@ class _LoginPageState extends State<LoginPage> {
       print('&&&&&&&&&&&&&&&&&&&&&&&& wallet not found, returning null');
       return null;
     }
+    return null;
   }
 
   void _showSnak(String message) {
@@ -108,58 +109,68 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<Wallet> _addWallet() async {
-    P.mprint(widget, '_addWallet .......................');
-    P.mprint(widget, mWallet.toJson().toString());
     P.mprint(widget,
-        "adding wallet to Firebase to kick off serverless function that creates a Stellar account");
+        "... adding wallet to Firebase to kick off serverless function that creates a Stellar account");
     final mainReference = fb.reference().child("wallets");
     await mainReference.push().set(mWallet.toJson()).catchError((error) {
       print(error);
       _showSnak('Failed to add wallet to Firebase');
+      return null;
     });
-    print('_LoginPageState._addWallet -  wallet added to firebase');
+    print(
+        '_LoginPageState._addWallet -  wallet added to Firebase. waiting ..... ....');
     var user = await _auth.currentUser();
+    //find wallet just  added
     DataSnapshot shot =
         await mainReference.orderByChild('uid').equalTo(user.uid).once();
-    print('_LoginPageState._addWallet ############# we have a wallet!! : ${shot
-        .value}');
-    Map map = shot.value;
-    print('_LoginPageState._addWallet  map has ${map.length}');
-    bool isNavigated = false;
-    map.forEach((key, value) {
-      mWallet = new Wallet.fromJSON(value);
-      mWallet.walletID = key;
-
-      print('_LoginPageState._addWallet - wallet created from json ....${key}');
-      var ref = mainReference.child(key);
-      ref.onChildChanged.listen((event) async {
+    if (shot.value != null) {
+      print(
+          '_LoginPageState._addWallet ############# we have an existing wallet!! : ${shot
+              .value}');
+      Map map = shot.value;
+      print('_LoginPageState._addWallet  map has ${map.length}');
+      bool isNavigated = false;
+      map.forEach((key, value) {
+        mWallet = new Wallet.fromJSON(value);
+        mWallet.walletID = key;
         print(
-            '_LoginPageState._addWallet - onChildChanged .....${event.snapshot.key}  ${event.snapshot.value}');
-        if (!isNavigated) {
-          var snapshot = await ref.once();
-          mWallet = new Wallet.fromJSON(snapshot.value);
-          if (mWallet.success) {
-            mWallet.walletID = snapshot.key;
-            mWallet.fcmToken = await SharedPrefs.getFCMToken();
-            print(
-                '_LoginPageState._addWallet  - saving wallet in  prefs: ##### ${mWallet.toJson()}');
-            await SharedPrefs.saveWallet(mWallet);
-            isNavigated = true;
-            var ref = mainReference.child(key);
-            ref.set(mWallet.toJson());
-            Navigator.popAndPushNamed(context, '/account');
-          } else {
-            _showSnak("Wallet  creation failed. Please try again");
+            '_LoginPageState._addWallet - new wallet found in firebase from json ....${key}');
+        var ref = mainReference.child(key);
+        ref.onChildChanged.listen((event) async {
+          print(
+              '_LoginPageState._addWallet - onChildChanged .....${event.snapshot
+                  .key}  ${event.snapshot.value}');
+          if (!isNavigated) {
+            var snapshot = await ref.once();
+            mWallet = new Wallet.fromJSON(snapshot.value);
+            if (mWallet.success) {
+              mWallet.walletID = snapshot.key;
+              mWallet.fcmToken = await SharedPrefs.getFCMToken();
+              print(
+                  '_LoginPageState._addWallet  - saving wallet in  prefs: ##### ${mWallet
+                      .toJson()}');
+              await SharedPrefs.saveWallet(mWallet);
+              isNavigated = true;
+              var ref = mainReference.child(key);
+              ref.set(mWallet.toJson());
+              Navigator.popAndPushNamed(context, '/account');
+            } else {
+              _showSnak("Wallet  creation failed. Please try again");
+            }
           }
-        }
+        });
       });
-    });
+    }
 
     return mWallet;
   }
 
   _encrypt() async {
     mWallet = await EncryptionUtil.encryptSeed(mWallet);
+    if (mWallet == null) {
+      _showSnak('Wallet creation failed. Please try later');
+      return null;
+    }
     print('_LoginPageState._encrypt wallet  encrypted :: ${mWallet.toJson()}');
   }
 
@@ -176,7 +187,6 @@ class _LoginPageState extends State<LoginPage> {
     print('_LoginPageState._getAuth ... getting auth');
     var authUtil = new MyAuth();
     FirebaseUser user = await authUtil.signInWithGoogle();
-    var cachedToken = await SharedPrefs.getFCMToken();
     if (user != null) {
       print(
           '_LoginPageState._getAuth - signInWithGoogle complete. authed: ${user
@@ -184,21 +194,10 @@ class _LoginPageState extends State<LoginPage> {
       // check if wallet exists
       await _findExistingWallet(user);
       if (mWallet != null) {
-        mWallet.fcmToken = cachedToken;
-
         if (mWallet.isEncrypted == null || !mWallet.isEncrypted) {
           await _encrypt();
-          await SharedPrefs.saveWallet(mWallet);
-        } else {
-          await SharedPrefs.saveWallet(mWallet);
-          assert(mWallet.walletID != null);
-          final mainReference =
-              fb.reference().child("wallets").child(mWallet.walletID);
-          mainReference.set(mWallet.toJson()).then((result) {
-            print(
-                '------_LoginPageState._getAuth--------------> updated fcmToken on existing wallet in firebase');
-          });
         }
+        await SharedPrefs.saveWallet(mWallet);
         Navigator.popAndPushNamed(context, '/account');
       } else {
         mWallet = new Wallet.create();
@@ -206,7 +205,7 @@ class _LoginPageState extends State<LoginPage> {
         mWallet.name = user.displayName;
         mWallet.url = user.photoUrl;
         mWallet.uid = user.uid;
-        _prepareWallet(cachedToken);
+        _prepareWallet();
       }
     }
     return null;

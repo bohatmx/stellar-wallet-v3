@@ -25,11 +25,7 @@ dependencies:
   json_annotation: ^0.2.3
   decimal: ^0.1.3
   zxing: ^0.0.4+1
-  flutter_string_encryption: "^0.0.2"
-
-#  barcodescanner:
-#      #this will be replaced with a proper dependency, once the plugin is release to dart-pub
-#      git: https://github.com/swissonid/BarcodeScannerPlugin.git
+  flutter_string_encryption: ^0.0.2
 
 dev_dependencies:
   flutter_test:

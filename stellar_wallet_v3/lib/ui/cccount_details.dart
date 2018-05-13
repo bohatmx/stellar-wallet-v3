@@ -62,7 +62,7 @@ class _AccountDetailsState extends State<AccountDetails>
   @override
   initState() {
     P.mprint(widget,
-        "......... initState .... configure Cloud Messaging and get fresh Account");
+        "######################## ......... initState .... configure Cloud Messaging and get fresh Account");
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     controller = AnimationController(
@@ -205,9 +205,7 @@ class _AccountDetailsState extends State<AccountDetails>
       onMessage: (Map<String, dynamic> message) {
         P.mprint(widget,
             "onMessage, AccountDetails: expecting wallet, payment or error mesage via FCM:\n: $message");
-
         var messageType = message["messageType"];
-
         if (messageType == "PAYMENT") {
           P.mprint(widget,
               "AccountDetails Receiving PAYMENT message )))))))))))))))))))))))))))))))))");
@@ -250,16 +248,19 @@ class _AccountDetailsState extends State<AccountDetails>
 
     _firebaseMessaging.getToken().then((String token) async {
       assert(token != null);
-      SharedPrefs.saveFCMToken(token);
-      if (wallet != null && wallet.walletID != null) {
-        wallet.fcmToken = token;
-        await SharedPrefs.saveWallet(wallet);
-        final mainReference = fb.reference().child("wallets");
-        var ref = mainReference.child(wallet.walletID);
-        ref.set(wallet.toJson());
-        print('_AccountDetailsState._configMessaging wallet updated !!');
+      var oldToken = await SharedPrefs.getFCMToken();
+      if (token != oldToken) {
+        SharedPrefs.saveFCMToken(token);
+        if (wallet != null && wallet.walletID != null) {
+          wallet.fcmToken = token;
+          await SharedPrefs.saveWallet(wallet);
+          final mainReference = fb.reference().child("wallets");
+          var ref = mainReference.child(wallet.walletID).child('fcmToken');
+          await ref.set(token);
+          print(
+              '_AccountDetailsState._configMessaging ########  wallet fcmToken updated !!');
+        }
       }
-      P.mprint(widget, "FCM token just cached: $token");
     }).catchError((e) {
       print('_AccountDetailsState._configMessaging ERROR fcmToken update');
     });
@@ -872,7 +873,7 @@ class _AccountDetailsState extends State<AccountDetails>
               startWalletList();
             },
             tooltip: 'Increment',
-            child: Icon(FontAwesomeIcons.list),
+            child: Icon(FontAwesomeIcons.users),
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
