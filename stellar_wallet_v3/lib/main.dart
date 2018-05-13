@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:stellar_wallet_v3/data/Account.dart';
 import 'package:stellar_wallet_v3/data/Wallet.dart';
-import 'package:stellar_wallet_v3/ui/WalletList.dart';
+import 'package:stellar_wallet_v3/ui/wallet_list.dart';
 import 'package:stellar_wallet_v3/ui/cccount_details.dart';
 import 'package:stellar_wallet_v3/ui/sign_in.dart';
 import 'package:stellar_wallet_v3/ui/widgets/bag.dart';
