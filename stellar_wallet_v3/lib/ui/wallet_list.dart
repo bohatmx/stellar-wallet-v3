@@ -16,13 +16,15 @@ class WalletList extends StatefulWidget {
       context.ancestorStateOfType(const TypeMatcher<_WalletListState>());
 }
 
-class _WalletListState extends State<WalletList> {
+class _WalletListState extends State<WalletList> with TickerProviderStateMixin {
   List<Wallet> wallets;
   Wallet myWallet;
   BuildContext ctx;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final reference = FirebaseDatabase.instance.reference().child('wallets');
   final wRef = FirebaseDatabase.instance.reference().child('wallets');
+  AnimationController controller;
+  Animation<double> actionAnimation;
   @override
   initState() {
     super.initState();
@@ -31,6 +33,25 @@ class _WalletListState extends State<WalletList> {
 
     _getMyWallet();
     _getWallets();
+    controller = AnimationController(
+      duration: Duration(milliseconds: 2000),
+      vsync: this,
+    );
+
+    controller.addStatusListener((listener) {
+      if (listener == AnimationStatus.forward) {
+        print('_LoginPageState.initState  ######### forward');
+      }
+      if (listener == AnimationStatus.reverse) {
+        print('_LoginPageState.initState  ######### reverse');
+      }
+      if (listener == AnimationStatus.completed) {
+        print('_LoginPageState.initState ######### completed ');
+      }
+      if (listener == AnimationStatus.dismissed) {
+        print('_LoginPageState.initState ######### dismissed');
+      }
+    });
   }
 
   _getMyWallet() async {
@@ -40,7 +61,7 @@ class _WalletListState extends State<WalletList> {
   }
 
   _refreshWallets() async {
-    _showSnackbar("Refreshing friends and wallet keys");
+    _showSnackbar("Refreshing friends and wallet keys ...");
 
     P.mprint(widget,
         "############### refreshing  wallets from Firebase I .........");
@@ -70,6 +91,8 @@ class _WalletListState extends State<WalletList> {
       wallets.sort((a, b) => a.name.compareTo(b.name));
       setState(() {
         count = wallets.length;
+        controller.reset();
+        controller.forward();
       });
     });
   }
@@ -86,7 +109,7 @@ class _WalletListState extends State<WalletList> {
   }
 
   _getWallets() async {
-    _showSnackbar("Loading friends and wallet keys");
+    _showSnackbar("Loading friends and wallet keys ...");
     var w = await FileUtil.getWallets();
     if (w == null || w.isEmpty) {
       _refreshWallets();
@@ -96,6 +119,8 @@ class _WalletListState extends State<WalletList> {
     setState(() {
       wallets = w;
       count = wallets.length;
+      controller.reset();
+      controller.forward();
     });
   }
 
@@ -142,7 +167,6 @@ class _WalletListState extends State<WalletList> {
                 style: new TextStyle(
                   fontSize: 32.0,
                   fontWeight: FontWeight.w900,
-                  fontFamily: 'Raleway',
                 ),
               ),
             ),
@@ -168,6 +192,8 @@ class _WalletListState extends State<WalletList> {
         tooltip: 'Refresh',
         child: new Icon(Icons.refresh),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButtonAnimator: new FAB(controller),
     );
   }
 
@@ -178,9 +204,23 @@ class _WalletListState extends State<WalletList> {
     }
     _scaffoldKey.currentState.hideCurrentSnackBar();
     _scaffoldKey.currentState.showSnackBar(new SnackBar(
-      content: new Text(
-        message,
-        style: new TextStyle(color: Colors.yellow),
+      content: new Row(
+        children: <Widget>[
+          new Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: new Container(
+              height: 40.0,
+              width: 40.0,
+              child: CircularProgressIndicator(
+                strokeWidth: 4.0,
+              ),
+            ),
+          ),
+          new Text(
+            message,
+            style: new TextStyle(color: Colors.yellow),
+          ),
+        ],
       ),
       duration: new Duration(seconds: 3),
     ));

@@ -15,7 +15,7 @@ class RecordWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ctx = context;
-    var format = new DateFormat.yMMMMEEEEd();
+    var format = new DateFormat.MMMEd();
     date = format.format(record.created_at);
 
     var formatTime = new DateFormat.Hms();
@@ -25,7 +25,7 @@ class RecordWidget extends StatelessWidget {
     if (record.amount != null) {
       amount = formatNum.format(double.parse(record.amount));
     }
-    var pink = Colors.pink;
+    var pink = Colors.pink.shade200;
     var teal = Colors.teal;
     bool isReceived = false;
     if (accountID == record.to) {
@@ -122,8 +122,7 @@ class RecordWidget extends StatelessWidget {
                           amount == null ? '0.00' : amount,
                           style: new TextStyle(
                               fontWeight: FontWeight.w900,
-                              fontSize: 28.0,
-                              fontFamily: 'Raleway',
+                              fontSize: 24.0,
                               color: isReceived ? teal : pink),
                         ),
                       ),
@@ -134,7 +133,6 @@ class RecordWidget extends StatelessWidget {
                           style: new TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16.0,
-                              fontFamily: 'Raleway',
                               color: Colors.purple),
                         ),
                       ),

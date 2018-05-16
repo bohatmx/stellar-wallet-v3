@@ -32,7 +32,7 @@ class _TheAppState extends State<TheApp> {
     super.initState();
     P.mprint(widget,
         "@@@@@@@@@@@@ ----------------------- initState - getting theme ...");
-    getTheme();
+    _getTheme();
     _getWallet();
   }
 
@@ -43,8 +43,14 @@ class _TheAppState extends State<TheApp> {
     });
   }
 
-  void getTheme() async {
+  _getTheme() async {
     int index = await SharedPrefs.getThemeIndex();
+//    if (index != null) {
+//      setState(() {
+//        themeData = MyThemes.getTheme(0);
+//      });
+//      return null;
+//    }
     if (index == null) {
       index = rand.nextInt(14);
       SharedPrefs.saveThemeIndex(index);

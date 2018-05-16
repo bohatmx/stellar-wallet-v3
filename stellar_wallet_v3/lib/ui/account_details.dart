@@ -97,7 +97,7 @@ class _AccountDetailsState extends State<AccountDetails>
     refresh();
   }
 
-  //AppLifecycleState _notification;
+  AppLifecycleState appLifecycleState;
   List<Record> records;
   int paymentType = 1;
   Record lastPayment;
@@ -154,9 +154,16 @@ class _AccountDetailsState extends State<AccountDetails>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    print('didChangeAppLifecycleState: $state');
-    var x = state.toString();
-    print('state: $x');
+    print(
+        'accountDetails: ##################### didChangeAppLifecycleState: ${state}  ${state.index}');
+    setState(() {
+      appLifecycleState = state;
+      switch (appLifecycleState.index) {
+        case 0: //resume
+          refresh();
+          break;
+      }
+    });
   }
 
   void _checkSignedIn() async {
@@ -279,6 +286,7 @@ class _AccountDetailsState extends State<AccountDetails>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     audioPlayer.stop();
+    controller.dispose();
     super.dispose();
   }
 
@@ -462,9 +470,16 @@ class _AccountDetailsState extends State<AccountDetails>
     _scaffoldKey.currentState.showSnackBar(new SnackBar(
       content: new Row(
         children: <Widget>[
-          new CircularProgressIndicator(
-            strokeWidth: 3.0,
-            backgroundColor: Theme.of(context).primaryColor,
+          new Container(
+            height: 40.0,
+            width: 40.0,
+            child: new Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: new CircularProgressIndicator(
+                strokeWidth: 4.0,
+                backgroundColor: Theme.of(context).primaryColor,
+              ),
+            ),
           ),
           Text(
             message,
@@ -500,7 +515,6 @@ class _AccountDetailsState extends State<AccountDetails>
               style: const TextStyle(
                   color: Colors.indigo,
                   fontSize: 20.0,
-                  fontFamily: 'Raleway',
                   fontWeight: FontWeight.w900),
             ),
           ),
@@ -513,7 +527,6 @@ class _AccountDetailsState extends State<AccountDetails>
               style: const TextStyle(
                   color: Colors.pink,
                   fontSize: 20.0,
-                  fontFamily: 'Raleway',
                   fontWeight: FontWeight.w900),
             ),
           ),
@@ -526,7 +539,6 @@ class _AccountDetailsState extends State<AccountDetails>
               style: const TextStyle(
                   color: Colors.teal,
                   fontSize: 20.0,
-                  fontFamily: 'Raleway',
                   fontWeight: FontWeight.w900),
             ),
           ),
@@ -539,7 +551,6 @@ class _AccountDetailsState extends State<AccountDetails>
               style: const TextStyle(
                   color: Colors.deepOrange,
                   fontSize: 20.0,
-                  fontFamily: 'Raleway',
                   fontWeight: FontWeight.w900),
             ),
           ),
@@ -552,7 +563,6 @@ class _AccountDetailsState extends State<AccountDetails>
               style: const TextStyle(
                   color: Colors.deepPurple,
                   fontSize: 20.0,
-                  fontFamily: 'Raleway',
                   fontWeight: FontWeight.w900),
             ),
           ),
@@ -565,7 +575,6 @@ class _AccountDetailsState extends State<AccountDetails>
               style: const TextStyle(
                   color: Colors.blueGrey,
                   fontSize: 20.0,
-                  fontFamily: 'Raleway',
                   fontWeight: FontWeight.w900),
             ),
           ),
@@ -578,7 +587,6 @@ class _AccountDetailsState extends State<AccountDetails>
               style: const TextStyle(
                   color: Colors.blue,
                   fontSize: 20.0,
-                  fontFamily: 'Raleway',
                   fontWeight: FontWeight.w900),
             ),
           ),
@@ -591,7 +599,6 @@ class _AccountDetailsState extends State<AccountDetails>
               style: const TextStyle(
                   color: Colors.brown,
                   fontSize: 20.0,
-                  fontFamily: 'Raleway',
                   fontWeight: FontWeight.w900),
             ),
           ),
@@ -604,7 +611,6 @@ class _AccountDetailsState extends State<AccountDetails>
               style: const TextStyle(
                   color: Colors.amber,
                   fontSize: 20.0,
-                  fontFamily: 'Raleway',
                   fontWeight: FontWeight.w900),
             ),
           ),
@@ -617,7 +623,6 @@ class _AccountDetailsState extends State<AccountDetails>
               style: const TextStyle(
                   color: Colors.cyan,
                   fontSize: 20.0,
-                  fontFamily: 'Raleway',
                   fontWeight: FontWeight.w900),
             ),
           ),
@@ -630,7 +635,6 @@ class _AccountDetailsState extends State<AccountDetails>
               style: const TextStyle(
                   color: Colors.lime,
                   fontSize: 20.0,
-                  fontFamily: 'Raleway',
                   fontWeight: FontWeight.w900),
             ),
           ),
@@ -679,7 +683,6 @@ class _AccountDetailsState extends State<AccountDetails>
                   style: TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.w900,
-                      fontFamily: 'Raleway',
                       color: Colors.grey.shade300),
                 ),
               ),
@@ -736,10 +739,9 @@ class _AccountDetailsState extends State<AccountDetails>
                                           ? "Balance"
                                           : _getBalance(),
                                       style: TextStyle(
-                                        fontSize: 30.0,
-                                        fontFamily: 'Raleway',
-                                        fontWeight: FontWeight.w900,
-                                      ),
+                                          fontSize: 30.0,
+                                          fontWeight: FontWeight.w900,
+                                          fontFamily: 'Raleway'),
                                     ),
                                   ),
                                 ),
@@ -829,7 +831,8 @@ class _AccountDetailsState extends State<AccountDetails>
                                         Theme.of(context).accentColor,
                                     child: Text(
                                       count == null ? '0' : count,
-                                      style: TextStyle(color: Colors.white),
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 10.0),
                                     ),
                                   ),
                                 ),
@@ -852,9 +855,9 @@ class _AccountDetailsState extends State<AccountDetails>
                     child: Text(
                       'Sign In',
                       style: TextStyle(
-                          fontSize: 28.0,
-                          fontWeight: FontWeight.w900,
-                          fontFamily: 'Raleway'),
+                        fontSize: 28.0,
+                        fontWeight: FontWeight.w900,
+                      ),
                     ),
                   ),
                 ),
@@ -896,7 +899,7 @@ class _AccountDetailsState extends State<AccountDetails>
             onPressed: () {
               startWalletList();
             },
-            tooltip: 'Increment',
+            tooltip: 'Payment  Contacts',
             child: Icon(FontAwesomeIcons.users),
           ),
         ),
@@ -930,9 +933,9 @@ class _AccountDetailsState extends State<AccountDetails>
       //payment received
       return TextStyle(
         color: Colors.teal,
-        fontFamily: 'Raleway',
         fontWeight: FontWeight.w900,
         fontSize: 24.0,
+        fontFamily: 'Raleway',
       );
     } else {
       if (lastPayment == null) {
@@ -940,14 +943,15 @@ class _AccountDetailsState extends State<AccountDetails>
           color: Colors.grey,
           fontWeight: FontWeight.normal,
           fontSize: 14.0,
+          fontFamily: 'Raleway',
         );
       }
       //payment made
       return TextStyle(
         color: Colors.pink,
-        fontFamily: 'Raleway',
         fontWeight: FontWeight.w900,
         fontSize: 24.0,
+        fontFamily: 'Raleway',
       );
     }
   }

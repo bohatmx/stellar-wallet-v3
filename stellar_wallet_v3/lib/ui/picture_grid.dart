@@ -193,7 +193,7 @@ class _PictureGridState extends State<PictureGrid> {
           title: new Text("Select Picture"),
         ),
         body: new Container(
-          color: Colors.purple.shade900,
+          color: Theme.of(context).primaryColor,
           child: new GridView.count(
             crossAxisCount: 3,
             primary: false,

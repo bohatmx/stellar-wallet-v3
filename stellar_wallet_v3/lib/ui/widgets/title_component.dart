@@ -87,7 +87,6 @@ class _TitleComponentState extends State<TitleComponent> {
                   style: new TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontFamily: 'Raleway',
                       fontSize: 18.0),
                 ),
                 onTap: _startQRMaker,
@@ -115,11 +114,12 @@ class _TitleComponentState extends State<TitleComponent> {
                       child: new RaisedButton(
                         onPressed: _scanBarcode,
                         elevation: 8.0,
+                        color: Theme.of(context).primaryColor,
                         child: new Text(
                           'Scan to Pay',
                           style: new TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.teal.shade700),
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -194,7 +194,12 @@ class _TitleComponentState extends State<TitleComponent> {
       ctx,
       new MaterialPageRoute(builder: (context) => new PictureGrid()),
     );
+    if (url == null) {
+      print('_TitleComponentState._startPictureGrid - did NOT select picture');
+      return null;
+    }
     setState(() {
+      print('_TitleComponentState._startPictureGrid -----');
       _profileImage = new NetworkImage(url);
     });
     P.mprint(widget, url);

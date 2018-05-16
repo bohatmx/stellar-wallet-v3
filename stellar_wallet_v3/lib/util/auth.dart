@@ -45,6 +45,7 @@ class MyAuth {
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
       print('googleAuth done ...... now authenticate with Firebase');
+
       user = await _auth.signInWithGoogle(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,

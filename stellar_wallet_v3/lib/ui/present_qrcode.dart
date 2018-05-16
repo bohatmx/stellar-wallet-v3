@@ -147,7 +147,6 @@ class _PresentQRCodeState extends State<PresentQRCode>
                         amount == null ? '' : amount,
                         style: new TextStyle(
                             fontWeight: FontWeight.w900,
-                            fontFamily: 'Raleway',
                             fontSize: 40.0,
                             color: Colors.teal),
                       ),

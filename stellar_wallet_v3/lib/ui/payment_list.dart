@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:stellar_wallet_v3/data/Record.dart';
 import 'package:stellar_wallet_v3/data/Wallet.dart';
+import 'package:stellar_wallet_v3/ui/account_details.dart';
 import 'package:stellar_wallet_v3/ui/widgets/bag.dart';
 import 'package:stellar_wallet_v3/ui/widgets/record_widget.dart';
 import 'package:stellar_wallet_v3/util/comms.dart';
@@ -22,16 +23,43 @@ class PaymentList extends StatefulWidget {
       context.ancestorStateOfType(const TypeMatcher<_PaymentState>());
 }
 
-class _PaymentState extends State<PaymentList> {
+class _PaymentState extends State<PaymentList> with TickerProviderStateMixin {
   List<Record> records;
   Wallet wallet;
   BuildContext ctx;
   String countMade = '0', countReceived = '0';
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
+  AnimationController controller;
+  Animation<double> actionAnimation;
   @override
   initState() {
     super.initState();
+    controller = AnimationController(
+      duration: Duration(milliseconds: 2000),
+      vsync: this,
+    );
+
+    controller.addStatusListener((listener) {
+      if (listener == AnimationStatus.forward) {
+        print('_PaymentState.initState  ######### forward');
+      }
+      if (listener == AnimationStatus.reverse) {
+        print('_PaymentState.initState  ######### reverse');
+      }
+      if (listener == AnimationStatus.completed) {
+        print('_PaymentState.initState ######### completed ');
+      }
+      if (listener == AnimationStatus.dismissed) {
+        print('_PaymentState.initState ######### dismissed');
+      }
+    });
+    controller.forward();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   BagWidget bagWidget;
@@ -72,8 +100,8 @@ class _PaymentState extends State<PaymentList> {
   }
 
   _getPayments() async {
-    _showSnackbar('Load payments from Stellar Payments Network...',
-        Colors.white, Colors.black);
+    _showSnackbar(
+        'Loading payments from Stellar...', Colors.white, Colors.black);
 
     Communications comms = new Communications();
     records = await comms.getPayments(wallet.accountID);
@@ -91,6 +119,9 @@ class _PaymentState extends State<PaymentList> {
         countMade = '${listM.length}';
         countReceived = '${listR.length}';
       });
+      _scaffoldKey.currentState.hideCurrentSnackBar();
+      controller.reset();
+      controller.forward();
     } catch (err) {
       print('Error setting state )))))))))))))');
     }
@@ -163,7 +194,6 @@ class _PaymentState extends State<PaymentList> {
                             style: new TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w900,
-                              fontFamily: 'Raleway',
                               fontSize: 30.0,
                             ),
                           ),
@@ -193,7 +223,6 @@ class _PaymentState extends State<PaymentList> {
                             style: new TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w900,
-                              fontFamily: 'Raleway',
                               fontSize: 30.0,
                             ),
                           ),
@@ -223,11 +252,13 @@ class _PaymentState extends State<PaymentList> {
         ],
       ),
       floatingActionButton: new FloatingActionButton(
-        elevation: 24.0,
+        elevation: 32.0,
         onPressed: _getPayments,
-        tooltip: 'Increment',
+        tooltip: 'Refresh Payments',
         child: new Icon(FontAwesomeIcons.briefcase),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButtonAnimator: new FAB(controller),
     );
   }
 
@@ -238,11 +269,26 @@ class _PaymentState extends State<PaymentList> {
     }
     _scaffoldKey.currentState.hideCurrentSnackBar();
     _scaffoldKey.currentState.showSnackBar(new SnackBar(
-      content: new Text(
-        message,
-        style: new TextStyle(color: textColor),
+      content: new Row(
+        children: <Widget>[
+          new Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: new Container(
+              height: 20.0,
+              width: 20.0,
+              child: new CircularProgressIndicator(
+                backgroundColor: Theme.of(context).primaryColor,
+                strokeWidth: 4.0,
+              ),
+            ),
+          ),
+          new Text(
+            message,
+            style: new TextStyle(color: textColor),
+          ),
+        ],
       ),
-      duration: new Duration(seconds: 30),
+      duration: new Duration(minutes: 5),
       backgroundColor: backColor,
     ));
   }

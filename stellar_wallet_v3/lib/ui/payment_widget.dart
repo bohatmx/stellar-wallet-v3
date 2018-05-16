@@ -225,18 +225,28 @@ class _PaymentWidgetState extends State<MakePayment>
   }
 
   void _showSnackbar(String message) {
-    P.mprint(widget, "trying to show snackBar ...");
     if (_scaffoldKey.currentState == null) {
       return;
     }
     _scaffoldKey.currentState.hideCurrentSnackBar();
     snackbar = new SnackBar(
-      content: new Text(
-        message,
-        style: new TextStyle(color: Colors.white),
+      content: new Row(
+        children: <Widget>[
+          new Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: new CircularProgressIndicator(
+              strokeWidth: 4.0,
+              backgroundColor: Theme.of(context).primaryColor,
+            ),
+          ),
+          new Text(
+            message,
+            style: new TextStyle(color: Colors.white),
+          ),
+        ],
       ),
       duration: new Duration(minutes: 5),
-      backgroundColor: Colors.indigo.shade800,
+      backgroundColor: Colors.black,
     );
 
     _scaffoldKey.currentState.showSnackBar(snackbar);
@@ -302,9 +312,16 @@ class _PaymentWidgetState extends State<MakePayment>
     _scaffoldKey.currentState.showSnackBar(new SnackBar(
       content: new Row(
         children: <Widget>[
-          new CircularProgressIndicator(
-            strokeWidth: 2.0,
-            backgroundColor: Theme.of(context).accentColor,
+          new Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: new Container(
+              height: 40.0,
+              width: 40.0,
+              child: new CircularProgressIndicator(
+                strokeWidth: 4.0,
+                backgroundColor: Theme.of(context).accentColor,
+              ),
+            ),
           ),
           Text(
             message,
@@ -407,7 +424,6 @@ class _PaymentWidgetState extends State<MakePayment>
                 style: new TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
-                    fontFamily: 'Raleway',
                     fontSize: 24.0),
               ),
             ),
@@ -442,7 +458,6 @@ class _PaymentWidgetState extends State<MakePayment>
                                 style: new TextStyle(
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.bold,
-                                    fontFamily: 'Raleway',
                                     color: Colors.indigo.shade300),
                               ),
                             ),
@@ -467,7 +482,6 @@ class _PaymentWidgetState extends State<MakePayment>
                                 style: new TextStyle(
                                   fontSize: 24.0,
                                   color: Colors.teal,
-                                  fontFamily: 'Raleway',
                                   fontWeight: FontWeight.w900,
                                 ),
                               ),
@@ -487,10 +501,11 @@ class _PaymentWidgetState extends State<MakePayment>
                             ),
                             onChanged: _onTextChanged,
                             style: new TextStyle(
-                                fontWeight: FontWeight.w900,
-                                fontFamily: 'Raleway',
-                                fontSize: 24.0,
-                                color: Colors.pink),
+                              fontWeight: FontWeight.w900,
+                              color: Colors.red.shade800,
+                              fontFamily: 'Raleway',
+                              fontSize: 36.0,
+                            ),
                           ),
                         ),
                         RaisedButton(
@@ -498,13 +513,16 @@ class _PaymentWidgetState extends State<MakePayment>
                           elevation: 12.0,
                           splashColor: Colors.blue,
                           disabledTextColor: Colors.indigo.shade100,
+                          shape: BeveledRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(7.0)),
+                          ),
                           child: new Padding(
                             padding: new EdgeInsets.all(10.0),
                             child: new Text(
                               "Send Payment",
                               style: new TextStyle(
-                                  color: Colors.pink,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.normal,
                                   fontSize: 20.0),
                             ),
                           ),

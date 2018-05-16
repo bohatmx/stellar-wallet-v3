@@ -2,10 +2,12 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:stellar_wallet_v3/data/Account.dart';
 import 'package:stellar_wallet_v3/data/Wallet.dart';
+import 'package:stellar_wallet_v3/ui/account_details.dart';
 import 'package:stellar_wallet_v3/util/auth.dart';
 import 'package:stellar_wallet_v3/util/comms.dart';
 import 'package:stellar_wallet_v3/util/constants.dart';
@@ -22,7 +24,8 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => new _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage>
+    with WidgetsBindingObserver, TickerProviderStateMixin {
   FirebaseDatabase fb = FirebaseDatabase.instance;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   var block1 =
@@ -36,8 +39,30 @@ class _LoginPageState extends State<LoginPage> {
   var title;
   var instruction = "Press the button to start";
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
+  AppLifecycleState appLifecycleState;
   final bool debug = Constants.debug;
+  AnimationController controller;
+  Animation<double> actionAnimation;
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print(
+        'sign_in: ##################### didChangeAppLifecycleState: ${state}  ${state.index}');
+
+    appLifecycleState = state;
+    switch (appLifecycleState.index) {
+      case 1:
+        initState();
+        break;
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    controller.dispose();
+    super.dispose();
+  }
 
   Future _prepareWallet() async {
     Communications comms = Communications();
@@ -199,6 +224,27 @@ class _LoginPageState extends State<LoginPage> {
   @override
   initState() {
     super.initState();
+    controller = AnimationController(
+      duration: Duration(milliseconds: 2000),
+      vsync: this,
+    );
+
+    controller.addStatusListener((listener) {
+      if (listener == AnimationStatus.forward) {
+        print('_LoginPageState.initState  ######### forward');
+      }
+      if (listener == AnimationStatus.reverse) {
+        print('_LoginPageState.initState  ######### reverse');
+      }
+      if (listener == AnimationStatus.completed) {
+        print('_LoginPageState.initState ######### completed ');
+      }
+      if (listener == AnimationStatus.dismissed) {
+        print('_LoginPageState.initState ######### dismissed');
+      }
+    });
+
+    controller.forward();
     _checkIfDebugVersion();
   }
 
@@ -206,6 +252,7 @@ class _LoginPageState extends State<LoginPage> {
   static const platform2 = const MethodChannel('com.oneconnect.wallet/debug');
 
   bool isSigningIn = false;
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   Future<FirebaseUser> _getAuth() async {
     if (isSigningIn) {
       return null;
@@ -227,6 +274,24 @@ class _LoginPageState extends State<LoginPage> {
         if (mWallet.isEncrypted == null || !mWallet.isEncrypted) {
           await _encrypt();
         }
+        _firebaseMessaging.getToken().then((String token) async {
+          assert(token != null);
+          var oldToken = await SharedPrefs.getFCMToken();
+          if (token != oldToken) {
+            await SharedPrefs.saveFCMToken(token);
+            if (mWallet.walletID != null) {
+              mWallet.fcmToken = token;
+              await SharedPrefs.saveWallet(mWallet);
+              final mainReference = fb.reference().child("wallets");
+              var ref = mainReference.child(mWallet.walletID).child('fcmToken');
+              await ref.set(token);
+              print(
+                  '_AccountDetailsState._configMessaging ########  wallet fcmToken updated !!');
+            }
+          }
+        }).catchError((e) {
+          print('_AccountDetailsState._configMessaging ERROR fcmToken update');
+        });
         await SharedPrefs.saveWallet(mWallet);
         Navigator.popAndPushNamed(context, '/account');
       } else {
@@ -257,7 +322,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     ctx = context;
     var bottom = PreferredSize(
-      preferredSize: Size.fromHeight(90.0),
+      preferredSize: Size.fromHeight(120.0),
       child: Theme(
         data: Theme.of(context).copyWith(accentColor: Colors.white),
         child: Padding(
@@ -271,11 +336,11 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 36.0),
+                      fontSize: 24.0),
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(top: 10.0),
+                padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
                 child: Text(
                   "Welcome Aboard the Good Ship",
                   style: TextStyle(
@@ -294,7 +359,7 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         title: Text("OneConnect Payments",
             style: TextStyle(
-                fontSize: 20.0,
+                fontSize: 12.0,
                 fontWeight: FontWeight.normal,
                 fontStyle: FontStyle.normal)),
         bottom: bottom,
@@ -302,7 +367,8 @@ class _LoginPageState extends State<LoginPage> {
       body: Column(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(18.0),
+            padding: const EdgeInsets.only(
+                top: 30.0, bottom: 18.0, left: 18.0, right: 18.0),
             child: Card(
               elevation: 8.0,
               child: Padding(
@@ -314,7 +380,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: Text(
                         'Welcome to OneConnect Payment Services',
                         style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 24.0),
+                            fontWeight: FontWeight.w700, fontSize: 20.0),
                       ),
                     ),
                     Padding(
@@ -331,8 +397,8 @@ class _LoginPageState extends State<LoginPage> {
                         block2,
                         style: TextStyle(
                             fontWeight: FontWeight.w500,
-                            fontSize: 20.0,
-                            color: Colors.teal),
+                            fontSize: 12.0,
+                            color: Colors.teal.shade900),
                       ),
                     ),
                   ],
@@ -342,11 +408,16 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _getAuth,
-        tooltip: 'Authenticate',
-        child: Icon(Icons.lock),
+      floatingActionButton: new Padding(
+        padding: const EdgeInsets.only(bottom: 100.0),
+        child: FloatingActionButton(
+          onPressed: _getAuth,
+          tooltip: 'Authenticate',
+          child: Icon(Icons.lock),
+        ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonAnimator: new FAB(controller),
     );
   }
 }

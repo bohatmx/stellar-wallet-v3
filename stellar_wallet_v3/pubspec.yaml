@@ -26,6 +26,8 @@ dependencies:
   decimal: ^0.1.3
   zxing: ^0.0.4+1
   flutter_string_encryption: ^0.0.2
+  intl: ^0.15.6
+  fluro: "^1.3.1"
 
 dev_dependencies:
   flutter_test:
@@ -70,3 +72,11 @@ flutter:
         fonts:
           - asset: fonts/Roboto-Regular.ttf
           - asset: fonts/Roboto-Bold.ttf
+      - family: Rubik
+        fonts:
+          - asset: fonts/Rubik-Regular.ttf
+          - asset: fonts/Rubik-Bold.ttf
+          - asset: fonts/Rubik-Black.ttf
+          - asset: fonts/Rubik-Light.ttf
+          - asset: fonts/Rubik-Italic.ttf
+          - asset: fonts/Rubik-Medium.ttf
