@@ -8,6 +8,7 @@ import 'package:stellar_wallet_v3/ui/widgets/wallet_widget.dart';
 import 'package:stellar_wallet_v3/util/file_util.dart';
 import 'package:stellar_wallet_v3/util/printer.dart';
 import 'package:stellar_wallet_v3/util/shared_prefs.dart';
+import 'package:stellar_wallet_v3/util/snackbar_util.dart';
 
 class WalletList extends StatefulWidget {
   @override
@@ -61,7 +62,12 @@ class _WalletListState extends State<WalletList> with TickerProviderStateMixin {
   }
 
   _refreshWallets() async {
-    _showSnackbar("Refreshing friends and wallet keys ...");
+    AppSnackbar.showSnackbarWithProgressIndicator(
+        context: context,
+        scaffoldKey: _scaffoldKey,
+        message: 'Refreshing friends and wallet keys ...',
+        textColor: Colors.yellow,
+        backgroundColor: Colors.black);
 
     P.mprint(widget,
         "############### refreshing  wallets from Firebase I .........");
@@ -109,7 +115,12 @@ class _WalletListState extends State<WalletList> with TickerProviderStateMixin {
   }
 
   _getWallets() async {
-    _showSnackbar("Loading friends and wallet keys ...");
+    AppSnackbar.showSnackbarWithProgressIndicator(
+        context: context,
+        scaffoldKey: _scaffoldKey,
+        message: 'Loading saved friends and wallet keys',
+        textColor: Colors.white,
+        backgroundColor: Colors.grey.shade600);
     var w = await FileUtil.getWallets();
     if (w == null || w.isEmpty) {
       _refreshWallets();
@@ -129,9 +140,14 @@ class _WalletListState extends State<WalletList> with TickerProviderStateMixin {
     if (AccountDetails.of(ctx) != null) {
       AccountDetails.of(ctx).refresh();
     }
-    var x =
-        'Payment of ' + result.amount + ' XLM has been made to: ' + result.name;
-    _showSnackbar(x);
+    var x = 'Payment of ${result.amount}  XLM has been made to: ${result.name}';
+    AppSnackbar.showSnackbarWithAction(
+        context: context,
+        scaffoldKey: _scaffoldKey,
+        message: x,
+        textColor: Colors.white,
+        backgroundColor: Colors.black,
+        actionLabel: "Done");
   }
 
   int count;
@@ -195,34 +211,5 @@ class _WalletListState extends State<WalletList> with TickerProviderStateMixin {
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButtonAnimator: new FAB(controller),
     );
-  }
-
-  void _showSnackbar(String message) {
-    P.mprint(widget, "trying to show snackBar ...");
-    if (_scaffoldKey.currentState == null) {
-      return;
-    }
-    _scaffoldKey.currentState.hideCurrentSnackBar();
-    _scaffoldKey.currentState.showSnackBar(new SnackBar(
-      content: new Row(
-        children: <Widget>[
-          new Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: new Container(
-              height: 40.0,
-              width: 40.0,
-              child: CircularProgressIndicator(
-                strokeWidth: 4.0,
-              ),
-            ),
-          ),
-          new Text(
-            message,
-            style: new TextStyle(color: Colors.yellow),
-          ),
-        ],
-      ),
-      duration: new Duration(seconds: 3),
-    ));
   }
 }

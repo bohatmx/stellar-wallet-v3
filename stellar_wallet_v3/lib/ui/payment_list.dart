@@ -8,6 +8,7 @@ import 'package:stellar_wallet_v3/ui/widgets/record_widget.dart';
 import 'package:stellar_wallet_v3/util/comms.dart';
 import 'package:stellar_wallet_v3/util/file_util.dart';
 import 'package:stellar_wallet_v3/util/printer.dart';
+import 'package:stellar_wallet_v3/util/snackbar_util.dart';
 
 class PaymentList extends StatefulWidget {
   final List<Record> records;
@@ -91,17 +92,31 @@ class _PaymentState extends State<PaymentList> with TickerProviderStateMixin {
     }
     assert(w != null);
     if (isReceiving) {
-      _showSnackbar("Payment received from " + w.name, Colors.white,
-          Colors.teal.shade700);
+      AppSnackbar.showSnackbar(
+        context: context,
+        scaffoldKey: _scaffoldKey,
+        message: "Payment received from ${w.name}",
+        textColor: Colors.white,
+        backgroundColor: Colors.teal.shade700,
+      );
     } else {
-      _showSnackbar(
-          "Payment made to " + w.name, Colors.white, Colors.pink.shade700);
+      AppSnackbar.showSnackbar(
+        context: context,
+        scaffoldKey: _scaffoldKey,
+        message: "Payment made to ${w.name}",
+        textColor: Colors.white,
+        backgroundColor: Colors.pink.shade700,
+      );
     }
   }
 
   _getPayments() async {
-    _showSnackbar(
-        'Loading payments from Stellar...', Colors.white, Colors.black);
+    AppSnackbar.showSnackbarWithProgressIndicator(
+        context: context,
+        scaffoldKey: _scaffoldKey,
+        message: 'Loading payments from Stellar...',
+        textColor: Colors.white,
+        backgroundColor: Colors.black);
 
     Communications comms = new Communications();
     records = await comms.getPayments(wallet.accountID);
@@ -260,37 +275,6 @@ class _PaymentState extends State<PaymentList> with TickerProviderStateMixin {
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButtonAnimator: new FAB(controller),
     );
-  }
-
-  void _showSnackbar(String message, Color textColor, Color backColor) {
-    P.mprint(widget, "trying to show snackBar ...");
-    if (_scaffoldKey.currentState == null) {
-      return;
-    }
-    _scaffoldKey.currentState.hideCurrentSnackBar();
-    _scaffoldKey.currentState.showSnackBar(new SnackBar(
-      content: new Row(
-        children: <Widget>[
-          new Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: new Container(
-              height: 20.0,
-              width: 20.0,
-              child: new CircularProgressIndicator(
-                backgroundColor: Theme.of(context).primaryColor,
-                strokeWidth: 4.0,
-              ),
-            ),
-          ),
-          new Text(
-            message,
-            style: new TextStyle(color: textColor),
-          ),
-        ],
-      ),
-      duration: new Duration(minutes: 5),
-      backgroundColor: backColor,
-    ));
   }
 
   void _displayMade() {

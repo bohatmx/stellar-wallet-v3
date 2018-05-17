@@ -26,6 +26,7 @@ import 'package:stellar_wallet_v3/util/comms.dart';
 import 'package:stellar_wallet_v3/util/encrypt_encrypt.dart';
 import 'package:stellar_wallet_v3/util/printer.dart';
 import 'package:stellar_wallet_v3/util/shared_prefs.dart';
+import 'package:stellar_wallet_v3/util/snackbar_util.dart';
 
 class AccountDetails extends StatefulWidget {
   @override
@@ -443,52 +444,21 @@ class _AccountDetailsState extends State<AccountDetails>
   Random rand = new Random(new DateTime.now().millisecondsSinceEpoch);
 
   void _showSnackbar(String message) {
-    print('_AccountDetailsState._showSnackbar - trying to show snackBar ..."');
-    if (_scaffoldKey.currentState == null) {
-      print(
-          '_AccountDetailsState._showSnackbar _scaffoldKey.currentState == null - no snackbar possible');
-      return;
-    }
-    _scaffoldKey.currentState.hideCurrentSnackBar();
-    _scaffoldKey.currentState.showSnackBar(new SnackBar(
-      content: new Text(
-        message,
-        style: new TextStyle(color: Colors.white),
-      ),
-      duration: new Duration(seconds: 30),
-    ));
+    AppSnackbar.showSnackbar(
+        context: context,
+        scaffoldKey: _scaffoldKey,
+        message: message,
+        textColor: Colors.white,
+        backgroundColor: Colors.black);
   }
 
   void _showSnackbarWithBusy(String message) {
-    print('_AccountDetailsState._showSnackbar - trying to show snackBar ..."');
-    if (_scaffoldKey.currentState == null) {
-      print(
-          '_AccountDetailsState._showSnackbar _scaffoldKey.currentState == null - no snackbar possible');
-      return;
-    }
-    _scaffoldKey.currentState.hideCurrentSnackBar();
-    _scaffoldKey.currentState.showSnackBar(new SnackBar(
-      content: new Row(
-        children: <Widget>[
-          new Container(
-            height: 40.0,
-            width: 40.0,
-            child: new Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: new CircularProgressIndicator(
-                strokeWidth: 4.0,
-                backgroundColor: Theme.of(context).primaryColor,
-              ),
-            ),
-          ),
-          Text(
-            message,
-            style: new TextStyle(color: Colors.white),
-          ),
-        ],
-      ),
-      duration: new Duration(seconds: 30),
-    ));
+    AppSnackbar.showSnackbarWithProgressIndicator(
+        context: context,
+        scaffoldKey: _scaffoldKey,
+        message: message,
+        textColor: Colors.white,
+        backgroundColor: Colors.black);
   }
 
   Future _finish(int index) async {

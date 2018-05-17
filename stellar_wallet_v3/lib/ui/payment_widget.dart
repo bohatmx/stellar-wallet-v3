@@ -7,12 +7,12 @@ import 'package:flutter/services.dart';
 import 'package:stellar_wallet_v3/data/Account.dart';
 import 'package:stellar_wallet_v3/data/Payment.dart';
 import 'package:stellar_wallet_v3/data/Wallet.dart';
-import 'package:stellar_wallet_v3/ui/account_details.dart';
 import 'package:stellar_wallet_v3/util/comms.dart';
 import 'package:stellar_wallet_v3/util/constants.dart';
 import 'package:stellar_wallet_v3/util/encrypt_encrypt.dart';
 import 'package:stellar_wallet_v3/util/printer.dart';
 import 'package:stellar_wallet_v3/util/shared_prefs.dart';
+import 'package:stellar_wallet_v3/util/snackbar_util.dart';
 
 class MakePayment extends StatefulWidget {
   final Wallet wallet;
@@ -111,7 +111,13 @@ class _PaymentWidgetState extends State<MakePayment>
 
     assert(destWallet != null);
     assert(myWallet != null);
-    _showSnackWithBusy("Submitting payment. Please wait");
+
+    AppSnackbar.showSnackbarWithProgressIndicator(
+        context: context,
+        scaffoldKey: _scaffoldKey,
+        message: 'Submitting payment. Please wait',
+        textColor: Colors.yellow,
+        backgroundColor: Colors.black);
 
     if (myWallet.fcmToken == null) {
       var _firebaseMessaging = new FirebaseMessaging();
@@ -129,7 +135,12 @@ class _PaymentWidgetState extends State<MakePayment>
 
     if (seed == null) {
       P.mprint(widget, 'Failed to decrypt private key - ####### ERROR !!');
-      _showSnackbar('Failed to decrypt private key ');
+
+      AppSnackbar.showErrorSnackbar(
+          context: context,
+          scaffoldKey: _scaffoldKey,
+          message: 'Failed to decrypt private key ',
+          actionLabel: 'Close');
       return;
     }
     print('decrypted seed: $seed');
@@ -175,7 +186,12 @@ class _PaymentWidgetState extends State<MakePayment>
     await acctRef.push().set(payment.toJson()).catchError((e) {
       print(
           '_PaymentWidgetState._submitPayment ERROR pushing payment  to account node');
-      _showSnackbar('Payment failed. Please try again later');
+
+      AppSnackbar.showErrorSnackbar(
+          context: context,
+          scaffoldKey: _scaffoldKey,
+          message: 'Payment failed. Please try again later',
+          actionLabel: 'Close');
     });
     Query query2 = await acctRef.limitToLast(1);
     var s = await query2.once();
@@ -216,150 +232,32 @@ class _PaymentWidgetState extends State<MakePayment>
         assert(payment != null);
         bool success = payment.success;
         if (success) {
-          _showSnackbarOK('${payment.amount} XLM has been paid OK');
+          AppSnackbar.showSnackbarWithAction(
+              context: context,
+              scaffoldKey: _scaffoldKey,
+              message: '${payment.amount} XLM has been paid OK',
+              textColor: Colors.white,
+              backgroundColor: Colors.black,
+              actionLabel: 'Done');
         } else {
-          _showSnackbar('Payment has failed');
+          AppSnackbar.showErrorSnackbar(
+              context: context,
+              scaffoldKey: _scaffoldKey,
+              message: 'Payment has failed',
+              actionLabel: 'Close');
         }
       }
     });
   }
 
-  void _showSnackbar(String message) {
-    if (_scaffoldKey.currentState == null) {
-      return;
-    }
-    _scaffoldKey.currentState.hideCurrentSnackBar();
-    snackbar = new SnackBar(
-      content: new Row(
-        children: <Widget>[
-          new Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: new CircularProgressIndicator(
-              strokeWidth: 4.0,
-              backgroundColor: Theme.of(context).primaryColor,
-            ),
-          ),
-          new Text(
-            message,
-            style: new TextStyle(color: Colors.white),
-          ),
-        ],
-      ),
-      duration: new Duration(minutes: 5),
-      backgroundColor: Colors.black,
-    );
-
-    _scaffoldKey.currentState.showSnackBar(snackbar);
-  }
-
-  void _showSnackbarOK(String message) {
-    if (_scaffoldKey.currentState == null) {
-      return;
-    }
-    _scaffoldKey.currentState.hideCurrentSnackBar();
-    snackbar = new SnackBar(
-      content: new Row(
-        children: <Widget>[
-          new Padding(
-            padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-            child: Icon(Icons.done),
-          ),
-          new Text(
-            message,
-            style: new TextStyle(color: Colors.white),
-          ),
-        ],
-      ),
-      duration: new Duration(minutes: 5),
-      backgroundColor: Colors.teal.shade700,
-      action: SnackBarAction(
-        label: 'Done',
-        onPressed: () {
-          Navigator.pop(context);
-        },
-      ),
-    );
-
-    _scaffoldKey.currentState.showSnackBar(snackbar);
-  }
-
   SnackBar snackbar;
 
-  void _showSnackWithAction(String message) {
-    if (_scaffoldKey.currentState == null) {
-      return;
-    }
-    _scaffoldKey.currentState.hideCurrentSnackBar();
-    snackbar = new SnackBar(
-      content: new Text(
-        message,
-        style: new TextStyle(color: Colors.white),
-      ),
-      backgroundColor: Colors.black,
-      action: new SnackBarAction(label: "Done", onPressed: _quitOK),
-      duration: new Duration(seconds: 30),
-    );
-
-    _scaffoldKey.currentState.showSnackBar(snackbar);
-  }
-
-  void _showSnackWithBusy(String message) {
-    print("trying to show snackBar ...");
-    if (_scaffoldKey.currentState == null) {
-      return;
-    }
-    _scaffoldKey.currentState.hideCurrentSnackBar();
-    _scaffoldKey.currentState.showSnackBar(new SnackBar(
-      content: new Row(
-        children: <Widget>[
-          new Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: new Container(
-              height: 40.0,
-              width: 40.0,
-              child: new CircularProgressIndicator(
-                strokeWidth: 4.0,
-                backgroundColor: Theme.of(context).accentColor,
-              ),
-            ),
-          ),
-          Text(
-            message,
-            style: new TextStyle(color: Colors.yellow),
-          ),
-        ],
-      ),
-      duration: new Duration(minutes: 5),
-    ));
-  }
-
   void _showError(String message) {
-    P.mprint(widget, "trying to show snackBar ...");
-    if (_scaffoldKey.currentState == null) {
-      return;
-    }
-    var snackbar = new SnackBar(
-      content: new Text(
-        message,
-        style: new TextStyle(color: Colors.yellow),
-      ),
-      duration: new Duration(minutes: 2),
-      backgroundColor: Colors.red,
-    );
-
-    _scaffoldKey.currentState.showSnackBar(snackbar);
-  }
-
-  void _quitOK() {
-    assert(ctx != null);
-
-    P.mprint(widget, 'PaymentWidget Navigator.pop(ctx, result)');
-    try {
-      AccountDetails.of(ctx).refresh();
-    } catch (err) {
-      print(err);
-    }
-    Navigator.pop(ctx);
+    AppSnackbar.showErrorSnackbar(
+        context: context,
+        scaffoldKey: _scaffoldKey,
+        message: message,
+        actionLabel: 'Close');
   }
 
   Future _getDestinationWallet() async {
